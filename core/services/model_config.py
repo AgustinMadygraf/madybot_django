@@ -4,7 +4,7 @@ Factory o configuración para crear instancias de clientes LLM (Gemini u otros).
 """
 
 import os
-from core.logs.logging_setup import app_logger as logger
+from core.logs.dependency_injection import app_logger as logger
 from core.services.llm_impl.gemini_llm import GeminiLLMClient
 from dotenv import load_dotenv
 

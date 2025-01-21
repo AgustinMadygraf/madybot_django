@@ -15,24 +15,12 @@
             "level": "DEBUG",
             "filters": ["exclude_http_logs"],
             "formatter": "simpleFormatter"
-        },
-        "ssl_file_handler": {
-            "class": "logging.FileHandler",
-            "level": "DEBUG",
-            "filename": "core/logs/sistema.log",
-            "formatter": "simpleFormatter",
-            "encoding": "utf-8"
         }
     },
     "loggers": {
         "": {
             "level": "DEBUG",
-            "handlers": ["console", "ssl_file_handler"]
-        },
-        "ssl": {
-            "level": "DEBUG",
-            "handlers": ["ssl_file_handler"],
-            "propagate": false
+            "handlers": ["console"]
         }
     },
     "formatters": {
