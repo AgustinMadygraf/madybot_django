@@ -1,4 +1,11 @@
-madybot_django/__pycache__/
 db.sqlite3
+docs/00-Prompt-for-ProjectAnalysis.md
+core/logs/sistema.log
 core/__pycache__/
+core/channels/__pycache__/
+core/logs/__pycache__/
 core/migrations/__pycache__/
+core/services/__pycache__/
+core/services/llm_impl/__pycache__/
+madybot_django/__pycache__/
+.env
