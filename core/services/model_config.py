@@ -29,7 +29,7 @@ class ModelConfig:
         Crea y retorna una instancia de GeminiLLMClient utilizando
         la configuración actual.
         """
-        return GeminiLLMClient(self.api_key, self.system_instruction)
+        return GeminiLLMClient(self.api_key, self.system_instruction, logger)
 
     def _load_system_instruction(self):
         """

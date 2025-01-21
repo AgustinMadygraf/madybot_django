@@ -5,15 +5,11 @@ Implementación de ILLMClient utilizando la API de Gemini.
 
 import google.generativeai as genai
 from core.services.llm_client import ILLMClient
-from core.logs.logging_setup import app_logger as logger  # Usar el logger global configurado
-
 
 class GeminiLLMClient(ILLMClient):
-    def __init__(self, api_key: str, system_instruction: str):
-        """
-        Inicializa el cliente para Gemini, configurando la API key y el modelo.
-        """
+    def __init__(self, api_key: str, system_instruction: str, logger):
         self.api_key = api_key
+        self.logger = logger
         genai.configure(api_key=self.api_key)
 
         self.model = genai.GenerativeModel(
@@ -28,9 +24,8 @@ class GeminiLLMClient(ILLMClient):
             system_instruction=system_instruction
         )
 
-        # Sesión de chat (se inicia en "lazy mode")
         self.chat_session = None
-        logger.info("GeminiLLMClient inicializado correctamente.")
+        self.logger.info("GeminiLLMClient inicializado correctamente.")
 
     def send_message(self, message: str) -> str:
         """
@@ -41,7 +36,7 @@ class GeminiLLMClient(ILLMClient):
             response = self.chat_session.send_message(message)
             return response.text
         except Exception as e:
-            logger.error("Error al enviar mensaje a Gemini: %s", e)
+            self.logger.error("Error al enviar mensaje a Gemini: %s", e)
             raise
 
     def send_message_streaming(self, message: str, chunk_size: int = 30) -> str:
@@ -60,13 +55,10 @@ class GeminiLLMClient(ILLMClient):
                 offset += chunk_size
             return full_response
         except Exception as e:
-            logger.error("Error durante la respuesta streaming en Gemini: %s", e)
+            self.logger.error("Error durante la respuesta streaming en Gemini: %s", e)
             raise
 
     def _start_chat_session(self):
-        """
-        Inicia la sesión de chat si no existe.
-        """
         if not self.chat_session:
             self.chat_session = self.model.start_chat()
-            logger.info("Sesión de chat iniciada con el modelo Gemini.")
+            self.logger.info("Sesión de chat iniciada con el modelo Gemini.")

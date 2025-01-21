@@ -1,3 +1,8 @@
+"""
+Path: core/urls.py
+Este módulo contiene las rutas de la aplicación web.
+"""
+
 from django.urls import path
 from core import views
 

@@ -4,21 +4,18 @@ Servicio para manejar la lógica principal de recepción y procesamiento de dato
 """
 
 from marshmallow import ValidationError
-from core.logs.logging_setup import app_logger as logger
-from core.services.data_validator import DataSchemaValidator
-from core.services.response_generator import ResponseGenerator
-from core.channels.imessaging_channel import IMessagingChannel
+
 
 class DataService:
     """
-    Servicio que encapsula la lógica de validación y generación de respuesta,
-    desacoplándola del framework Flask.
+    Servicio que encapsula la lógica de validación y generación de respuesta.
     """
 
-    def __init__(self, validator: DataSchemaValidator, response_generator: ResponseGenerator, channel: IMessagingChannel):
+    def __init__(self, validator, response_generator, channel, logger):
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
+        self.logger = logger
 
     def process_incoming_data(self, json_data: dict) -> str:
         """
@@ -26,29 +23,24 @@ class DataService:
         se genera en streaming o de forma normal.
         Retorna el mensaje de respuesta final para ser renderizado.
         """
-
-        # Validar
-        logger.info("Validando datos: %s", json_data)
+        self.logger.info("Validando datos: %s", json_data)
         try:
             valid_data = self.validator.validate(json_data)
         except ValidationError as err:
-            logger.warning("Error de validación: %s", err.messages)
+            self.logger.warning("Error de validación: %s", err.messages)
             raise
 
-        # Recibir mensaje desde el canal
         processed_data = self.channel.receive_message(valid_data)
-        logger.info("Datos procesados desde el canal: %s", processed_data)
+        self.logger.info("Datos procesados desde el canal: %s", processed_data)
 
         message_text = processed_data.get('message')
         is_stream = processed_data.get('stream', False)
 
         try:
             if is_stream:
-                logger.info("Generando respuesta en modo streaming.")
                 return self.response_generator.generate_response_streaming(message_text)
             else:
-                logger.info("Generando respuesta en modo normal.")
                 return self.response_generator.generate_response(message_text)
         except Exception as e:
-            logger.error("Error procesando la solicitud: %s", e)
+            self.logger.error("Error procesando la solicitud: %s", e)
             raise

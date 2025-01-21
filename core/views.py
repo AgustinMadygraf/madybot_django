@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from core.services.data_validator import DataSchemaValidator
 from core.services.model_config import ModelConfig
 from core.services.response_generator import ResponseGenerator
+from core.logs.logging_setup import app_logger  # Importar el logger configurado
 
 class WebMessagingChannel(IMessagingChannel):
     # Igual que en Flask
@@ -25,9 +26,9 @@ class WebMessagingChannel(IMessagingChannel):
 data_validator = DataSchemaValidator()
 model_config = ModelConfig()
 llm_client = model_config.create_llm_client()
-response_generator = ResponseGenerator(llm_client)
+response_generator = ResponseGenerator(llm_client, app_logger)  # Usar el logger importado
 web_channel = WebMessagingChannel()
-data_service = DataService(data_validator, response_generator, web_channel)
+data_service = DataService(data_validator, response_generator, web_channel, app_logger)  # Usar el logger
 
 @csrf_exempt
 def receive_data(request):
