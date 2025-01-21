@@ -1,3 +1,9 @@
-from django.shortcuts import render
+"""
+Path: core/views.py
+Este archivo se encarga de manejar las vistas de la aplicación core.
+"""
 
-# Create your views here.
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("¡Hola, Django está funcionando!")

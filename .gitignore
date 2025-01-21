@@ -1,2 +1,4 @@
 madybot_django/__pycache__/
 db.sqlite3
+core/__pycache__/
+core/migrations/__pycache__/
