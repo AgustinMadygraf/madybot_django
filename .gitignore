@@ -10,3 +10,5 @@ core/services/llm_impl/__pycache__/
 madybot_django/__pycache__/
 .env
 todo.md
+componente_flask/controllers/__pycache__/
+componente_flask/views/__pycache__/
