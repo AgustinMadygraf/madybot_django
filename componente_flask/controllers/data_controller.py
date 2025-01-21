@@ -13,10 +13,10 @@ from componente_flask.views.data_view import render_json_response
 from core.logs.config_logger import LoggerConfigurator
 
 # Services y canales
-from core.services.data_service import DataService
+from componente_flask.services.data_service import DataService
 from core.services.data_validator import DataSchemaValidator
-from core.services.model_config import ModelConfig
-from core.services.response_generator import ResponseGenerator
+from componente_flask.services.model_config import ModelConfig
+from componente_flask.services.response_generator import ResponseGenerator
 from core.channels.imessaging_channel import IMessagingChannel
 
 logger = LoggerConfigurator().configure()

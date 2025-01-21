@@ -12,3 +12,5 @@ madybot_django/__pycache__/
 todo.md
 componente_flask/controllers/__pycache__/
 componente_flask/views/__pycache__/
+componente_flask/services/__pycache__/
+componente_flask/services/llm_impl/__pycache__/
