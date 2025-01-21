@@ -127,3 +127,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True  # Para desarrollo, no seguro en producción
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',  # Incluye el host del servidor Django
+    'http://localhost:8080',  # Añade el origen desde donde envías las solicitudes
+]
