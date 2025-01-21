@@ -9,3 +9,4 @@ core/services/__pycache__/
 core/services/llm_impl/__pycache__/
 madybot_django/__pycache__/
 .env
+todo.md

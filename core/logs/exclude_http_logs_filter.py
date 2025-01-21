@@ -1,13 +1,13 @@
 """
-src/logs/ExcludeHTTPLogsFilter.py
+Path: core/logs/exclude_http_logs_filter.py
 Filter module for excluding specific HTTP logs.
 """
 
 import logging
 
 class ExcludeHTTPLogsFilter(logging.Filter):
-    """Filters out HTTP GET and POST requests from logs."""
-    # pylint: disable=too-few-public-methods
-    def filter(self, record):
-        """Exclude log records containing 'GET /' or 'POST /'."""
-        return 'GET /' not in record.getMessage() and 'POST /' not in record.getMessage()
+    """Filtra registros que contienen solicitudes HTTP GET o POST."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        message = record.getMessage()
+        return not any(keyword in message for keyword in ['GET /', 'POST /'])

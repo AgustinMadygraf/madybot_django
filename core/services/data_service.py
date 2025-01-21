@@ -1,15 +1,13 @@
 """
-Path: src/services/data_service.py
+Path: core/services/data_service.py
 Servicio para manejar la lógica principal de recepción y procesamiento de datos.
 """
 
 from marshmallow import ValidationError
-from core.logs.config_logger import LoggerConfigurator
+from core.logs.logging_setup import app_logger as logger
 from core.services.data_validator import DataSchemaValidator
 from core.services.response_generator import ResponseGenerator
 from core.channels.imessaging_channel import IMessagingChannel
-
-logger = LoggerConfigurator().configure()
 
 class DataService:
     """

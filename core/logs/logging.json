@@ -2,23 +2,24 @@
     "version": 1,
     "disable_existing_loggers": false,
     "filters": {
+        "info_error_filter": {
+            "()": "core.logs.info_error_filter.InfoErrorFilter"
+        },
         "exclude_http_logs": {
-            "()": "src.logs.exclude_http_logs_filter.ExcludeHTTPLogsFilter"
+            "()": "core.logs.exclude_http_logs_filter.ExcludeHTTPLogsFilter"
         }
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "level": "DEBUG",
-            "filters": [
-                "exclude_http_logs"
-            ],
+            "filters": ["exclude_http_logs"],
             "formatter": "simpleFormatter"
         },
         "ssl_file_handler": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
-            "filename": "src/logs/sistema.log",
+            "filename": "core/logs/sistema.log",
             "formatter": "simpleFormatter",
             "encoding": "utf-8"
         }
@@ -26,15 +27,11 @@
     "loggers": {
         "": {
             "level": "DEBUG",
-            "handlers": [
-                "console", "ssl_file_handler"
-            ]
+            "handlers": ["console", "ssl_file_handler"]
         },
         "ssl": {
             "level": "DEBUG",
-            "handlers": [
-                "ssl_file_handler"
-            ],
+            "handlers": ["ssl_file_handler"],
             "propagate": false
         }
     },

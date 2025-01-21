@@ -1,97 +1,65 @@
 """
-src/logs/config_logger.py
-Logger configuration module.
+Path: core/logs/config_logger.py
+Clase LoggerConfigurator mejorada para soportar filtros dinámicos.
 """
 
-import logging.config
 import os
 import json
 from abc import ABC, abstractmethod
-from core.logs.info_error_filter import InfoErrorFilter
-from dotenv import load_dotenv
-import sys
-
-# Cargar las variables de entorno desde .env
-load_dotenv()
+from logging import Filter
 
 class ConfigStrategy(ABC):
-    """Abstract base class for configuration strategies."""
+    """Clase base para las estrategias de configuración del logger."""
+
     @abstractmethod
     def load_config(self):
-        """Loads configuration from a specific source."""
-        print("load_config method not implemented.")
+        """Método que debe implementarse para cargar la configuración."""
+        pass
+
 
 class JSONConfigStrategy(ConfigStrategy):
-    """Loads configuration from a JSON file."""
-    def __init__(self, config_path='src/logs/logging.json', env_key='LOG_CFG'):
+    """Estrategia para cargar la configuración desde un archivo JSON."""
+
+    def __init__(self, config_path='core/logs/logging.json', env_key='LOG_CFG'):
         self.config_path = config_path
         self.env_key = env_key
 
     def load_config(self):
-        """Loads configuration from a JSON file or environment variable."""
-        path = self.config_path
-        value = os.getenv(self.env_key, None)
-        if value:
-            path = value
+        """Carga la configuración desde un archivo JSON o ruta especificada en una variable de entorno."""
+        path = os.getenv(self.env_key, self.config_path)
         if os.path.exists(path):
-            with open(path, 'rt', encoding='utf-8') as f:
+            with open(path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         return None
 
+
 class LoggerConfigurator:
-    """Configures logging for the application using a strategy pattern."""
-    def __init__(self, config_strategy=None, default_level=logging.INFO):
+    """
+    Clase que utiliza una estrategia de configuración para
+    cargar filtros y el diccionario de configuración del logger.
+    """
+
+    def __init__(self, config_strategy: ConfigStrategy = None):
         self.config_strategy = config_strategy or JSONConfigStrategy()
-        self.default_level = default_level
+        self.filters = {}
 
-    def configure(self):
-        """Configures the logger using the provided strategy."""
-        config = self.config_strategy.load_config()
-        # Cargar la variable IS_DEVELOPMENT desde el entorno
-        is_development_str = os.getenv('IS_DEVELOPMENT', 'false').lower()
-        is_development = is_development_str == 'true'
+    def get_config(self):
+        """Retorna la configuración del logger usando la estrategia asignada."""
+        return self.config_strategy.load_config()
 
-        if config:
-            # Modificar la configuración del handler 'console' basado en IS_DEVELOPMENT
-            handlers = config.get('handlers', {})
-            console_handler = handlers.get('console', None)
-            if console_handler:
-                if is_development:
-                    # En desarrollo, permitir DEBUG
-                    console_handler['level'] = 'DEBUG'
-                else:
-                    # En producción, establecer al menos INFO
-                    console_handler['level'] = 'INFO'
-            else:
-                # Si no existe un handler 'console', podrías agregar uno si es necesario
-                if is_development:
-                    config['handlers']['console'] = {
-                        "class": "logging.StreamHandler",
-                        "level": "DEBUG",
-                        "formatter": "simpleFormatter"
-                    }
-                    # Agregar el handler a los loggers
-                    for logger_name, logger_info in config.get('loggers', {}).items():
-                        logger_info['handlers'].append('console')
-                else:
-                    # En producción, podrías optar por no agregar el handler 'console' o ajustarlo
-                    pass
+    def register_filter(self, name: str, filter_class: type[Filter]):
+        """
+        Registra un filtro dinámicamente.
 
-            logging.config.dictConfig(config)
-        else:
-            # Configuración por defecto si no se encuentra el archivo de logging.json
-            logging.basicConfig(level=self.default_level)
-            logging.warning("Logging configuration file not found. Using default settings.")
+        :param name: Nombre del filtro.
+        :param filter_class: Clase del filtro que hereda de logging.Filter.
+        """
+        self.filters[name] = filter_class()
 
-        return logging.getLogger(__name__)
+    def get_filters(self):
+        """
+        Retorna los filtros registrados.
 
-# Configuración inicial del logger para módulos individuales
-initial_config_strategy = JSONConfigStrategy()
-logger_configurator = LoggerConfigurator(config_strategy=initial_config_strategy)
-logger = logger_configurator.configure()
-logger.addFilter(InfoErrorFilter())  # Aplica el filtro InfoErrorFilter
-
-# Configurar el StreamHandler para usar UTF-8 (si es necesario)
-for handler in logger.handlers:
-    if isinstance(handler, logging.StreamHandler):
-        handler.setEncoding('utf-8')
+        :return: Diccionario con filtros configurados.
+        """
+        return self.filters

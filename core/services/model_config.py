@@ -1,13 +1,14 @@
 """
-Path: src/services/model_config.py
+Path: core/services/model_config.py
 Factory o configuración para crear instancias de clientes LLM (Gemini u otros).
 """
 
 import os
-from core.logs.config_logger import LoggerConfigurator
+from core.logs.logging_setup import app_logger as logger
 from core.services.llm_impl.gemini_llm import GeminiLLMClient
+from dotenv import load_dotenv
 
-logger = LoggerConfigurator().configure()
+load_dotenv() 
 
 class ModelConfig:
     """

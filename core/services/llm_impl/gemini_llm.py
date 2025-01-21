@@ -1,13 +1,12 @@
 """
-Path: src/services/llm_impl/gemini_llm.py
+Path: core/services/llm_impl/gemini_llm.py
 Implementación de ILLMClient utilizando la API de Gemini.
 """
 
 import google.generativeai as genai
 from core.services.llm_client import ILLMClient
-from core.logs.config_logger import LoggerConfigurator
+from core.logs.logging_setup import app_logger as logger  # Usar el logger global configurado
 
-logger = LoggerConfigurator().configure()
 
 class GeminiLLMClient(ILLMClient):
     def __init__(self, api_key: str, system_instruction: str):

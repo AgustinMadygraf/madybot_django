@@ -1,14 +1,13 @@
 """
-Path: src/services/response_generator.py
+Path: core/services/response_generator.py
 Este módulo contiene una clase que genera respuestas utilizando un modelo de lenguaje generativo,
 manteniendo la lógica independiente de cualquier canal específico (web, Telegram, etc.).
 """
 
-from core.logs.config_logger import LoggerConfigurator
+from core.logs.logging_setup import app_logger as logger
 from core.services.model_config import ModelConfig
 
-# Configuración del logger
-logger = LoggerConfigurator().configure()
+from core.logs.logging_setup import app_logger as logger
 
 class ResponseGenerator:
     """
