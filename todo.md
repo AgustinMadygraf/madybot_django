@@ -11,9 +11,9 @@ A continuación, se indican los pasos prioritarios para migrar la lógica desde 
 - **Archivo a crear:** `core/utils/response.py`
   - **Objetivo:** Unificar la función `render_json_response` que actualmente reside en `componente_flask/view.py`.
   - **Tareas detalladas:**
-    1. [ ] Crear la función `render_json_response(status_code: int, message: str, stream: bool = False)` en `core/utils/response.py`.
-    2. [ ] Adaptar la lógica para que retorne un `JsonResponse` propio de Django, pero conservando la estructura `{"response_MadyBot": "...", "response_MadyBot_stream": "..."}`.
-    3. [ ] Asegurarse de incluir logs similares a los de Flask (usando el `app_logger` o logger configurado).
+    1. [x] Crear la función `render_json_response(status_code: int, message: str, stream: bool = False)` en `core/utils/response.py`.
+    2. [x] Adaptar la lógica para que retorne un `JsonResponse` propio de Django, pero conservando la estructura `{"response_MadyBot": "...", "response_MadyBot_stream": "..."}`.
+    3. [x] Asegurarse de incluir logs similares a los de Flask (usando el `app_logger` o logger configurado).
 
 #### 1.1.2 Eliminar duplicaciones en `componente_flask/view.py`
 - **Archivo a modificar/eliminar:** `componente_flask/view.py`

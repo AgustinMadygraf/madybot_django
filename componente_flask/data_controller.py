@@ -9,7 +9,7 @@ from flask import Blueprint, request, redirect
 from flask_cors import CORS
 from dotenv import load_dotenv
 from marshmallow import ValidationError
-from core.channels.utils.response import render_json_response
+from core.utils.response import render_json_response
 from core.logs.config_logger import LoggerConfigurator
 
 # Services y canales

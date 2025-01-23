@@ -15,3 +15,4 @@ componente_flask/services/__pycache__/
 componente_flask/services/llm_impl/__pycache__/
 componente_flask/__pycache__/
 core/channels/utils/__pycache__/
+core/utils/__pycache__/
