@@ -15,7 +15,7 @@ from core.logs.config_logger import LoggerConfigurator
 # Services y canales
 from componente_flask.services.data_service import DataService
 from core.services.data_validator import DataSchemaValidator
-from componente_flask.services.model_config import ModelConfig
+from core.services.model_config import ModelConfig
 from componente_flask.services.response_generator import ResponseGenerator
 from core.channels.imessaging_channel import IMessagingChannel
 

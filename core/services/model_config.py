@@ -22,7 +22,7 @@ except ImportError:
     from core.logs.config_logger import LoggerConfigurator
     default_logger = LoggerConfigurator().configure()
 
-from componente_flask.services.llm_impl.gemini_llm import GeminiLLMClient
+from core.services.llm_impl.gemini_llm import GeminiLLMClient
 
 
 class ModelConfig:

@@ -15,7 +15,7 @@ from core.services.data_service import DataService
 from core.services.response_generator import ResponseGenerator
 
 # IMPORTACIÓN NUEVA: usar el model_config "unificado" de componente_flask
-from componente_flask.services.model_config import ModelConfig
+from core.services.model_config import ModelConfig
 
 
 class WebMessagingChannel(IMessagingChannel):

@@ -5,7 +5,7 @@ manteniendo la lógica independiente de cualquier canal específico (web, Telegr
 """
 
 from core.logs.config_logger import LoggerConfigurator
-from componente_flask.services.model_config import ModelConfig
+from core.services.model_config import ModelConfig
 
 # Configuración del logger
 logger = LoggerConfigurator().configure()
