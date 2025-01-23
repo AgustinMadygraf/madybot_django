@@ -1,12 +1,12 @@
 """
-Path: main.py
+Path: app_flask.py
 
 """
 
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-from componente_flask.controllers.data_controller import data_controller
+from componente_flask.data_controller import data_controller
 from core.logs.config_logger import LoggerConfigurator
 
 # Configuración del logger al inicio del script

@@ -1,5 +1,6 @@
 """
-Path: componente_flask/views/data_view.py
+Path: core/utils/response.py
+
 """
 
 from flask import jsonify
