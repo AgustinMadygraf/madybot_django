@@ -19,7 +19,6 @@ class IMessagingChannel(ABC):
         :param msg: El mensaje a enviar.
         :param chat_id: El ID del destinatario (opcional, dependiendo del canal).
         """
-        pass
 
     @abstractmethod
     def receive_message(self, payload: dict) -> dict:
@@ -29,4 +28,3 @@ class IMessagingChannel(ABC):
         :param payload: Un diccionario con los datos del mensaje recibido.
         :return: Un diccionario procesado listo para ser utilizado.
         """
-        pass

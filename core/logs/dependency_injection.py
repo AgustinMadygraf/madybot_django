@@ -4,13 +4,15 @@ Contenedor de dependencias para inyección de dependencias.
 """
 
 from core.logs.config_logger import LoggerConfigurator
+from core.logs.info_error_filter import InfoErrorFilter
+from core.logs.exclude_http_logs_filter import ExcludeHTTPLogsFilter
 
 # Crear una instancia global de LoggerConfigurator
 configurator = LoggerConfigurator()
 
 # Registrar filtros dinámicos
-configurator.register_filter('info_error_filter', lambda: __import__('core.logs.info_error_filter').logs.info_error_filter.InfoErrorFilter())
-configurator.register_filter('exclude_http_logs_filter', lambda: __import__('core.logs.exclude_http_logs_filter').logs.exclude_http_logs_filter.ExcludeHTTPLogsFilter())
+configurator.register_filter('info_error_filter', InfoErrorFilter)
+configurator.register_filter('exclude_http_logs_filter', ExcludeHTTPLogsFilter)
 
 # Configurar el logger con los filtros registrados
 app_logger = configurator.configure()
