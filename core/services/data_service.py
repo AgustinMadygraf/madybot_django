@@ -17,7 +17,8 @@ class DataService:
     desacoplándola del framework Flask.
     """
 
-    def __init__(self, validator: DataSchemaValidator, response_generator: ResponseGenerator, channel: IMessagingChannel):
+    def __init__(self, validator: DataSchemaValidator,
+                 response_generator: ResponseGenerator, channel: IMessagingChannel):
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
@@ -48,9 +49,12 @@ class DataService:
             if is_stream:
                 logger.info("Generando respuesta en modo streaming.")
                 return self.response_generator.generate_response_streaming(message_text)
-            else:
-                logger.info("Generando respuesta en modo normal.")
-                return self.response_generator.generate_response(message_text)
-        except Exception as e:
+            logger.info("Generando respuesta en modo normal.")
+            return self.response_generator.generate_response(message_text)
+        except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
-            raise
+            return "Error procesando la solicitud."
+
+    def another_public_method(self):
+        "Este método es público y puede ser llamado desde cualquier parte."
+        print("Este método es público y puede ser llamado desde cualquier parte.")

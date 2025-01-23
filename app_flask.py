@@ -3,6 +3,7 @@ Path: app_flask.py
 
 """
 
+import sys
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -23,7 +24,7 @@ except FileNotFoundError as e:
     logger.error("Error loading .env file: %s", e)
     logger.debug("Asegúrate de que el archivo .env existe en el directorio raíz del proyecto")
     print("Please create a .env file with the necessary environment variables.")
-    exit(1)
+    sys.exit(1)
 
 app = Flask(__name__)
 CORS(app)
@@ -32,15 +33,14 @@ CORS(app)
 try:
     app.register_blueprint(data_controller)
     logger.info("Blueprint registrado correctamente.")
-except Exception as e:
+except RuntimeError as e:
     logger.error("Error al registrar el blueprint: %s", e)
-    exit(1)
-
+    sys.exit(1)
 
 if __name__ == '__main__':
     try:
         app.run(host='0.0.0.0', port=5000)
         logger.info("Servidor configurado para HTTP.")
-    except Exception as e:
+    except (OSError, RuntimeError) as e:
         logger.error("Error al iniciar el servidor Flask: %s", e)
-        exit(1)
+        sys.exit(1)
