@@ -16,7 +16,7 @@ from core.logs.config_logger import LoggerConfigurator
 from componente_flask.services.data_service import DataService
 from core.services.data_validator import DataSchemaValidator
 from core.services.model_config import ModelConfig
-from componente_flask.services.response_generator import ResponseGenerator
+from core.services.response_generator import ResponseGenerator
 from core.channels.imessaging_channel import IMessagingChannel
 
 logger = LoggerConfigurator().configure()

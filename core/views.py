@@ -8,7 +8,7 @@ from core.services.data_service import DataService
 from core.services.model_config import ModelConfig
 
 # Use the new unified response generator
-from componente_flask.services.response_generator import ResponseGenerator
+from core.services.response_generator import ResponseGenerator
 
 class WebMessagingChannel(IMessagingChannel):
     def send_message(self, msg: str, chat_id: str = None) -> None:
