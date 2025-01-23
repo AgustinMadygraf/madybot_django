@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from core.channels.imessaging_channel import IMessagingChannel
 from core.logs.dependency_injection import app_logger
 from core.services.data_validator import DataSchemaValidator
-from core.services.data_service import DataService
+from componente_flask.services.data_service import DataService
 from core.services.model_config import ModelConfig
 
 # Use the new unified response generator
@@ -22,14 +22,13 @@ class WebMessagingChannel(IMessagingChannel):
 # Global instances
 data_validator = DataSchemaValidator()
 model_config = ModelConfig(logger=app_logger)
-response_generator = ResponseGenerator(logger=app_logger)
+response_generator = ResponseGenerator(llm_client=model_config.create_llm_client(), logger=app_logger)
 web_channel = WebMessagingChannel()
 data_service = DataService(
     validator=data_validator,
     response_generator=response_generator,
-    channel=web_channel,
-    logger=app_logger
-)
+    channel=web_channel
+) 
 
 
 @csrf_exempt
