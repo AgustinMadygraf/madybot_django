@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from core.channels.imessaging_channel import IMessagingChannel
 from core.logs.dependency_injection import app_logger
 from core.services.data_validator import DataSchemaValidator
-from componente_flask.services.data_service import DataService
+from core.services.data_service import DataService
 from core.services.model_config import ModelConfig
 
 # Use the new unified response generator

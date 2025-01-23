@@ -13,7 +13,7 @@ from componente_flask.view import render_json_response
 from core.logs.config_logger import LoggerConfigurator
 
 # Services y canales
-from componente_flask.services.data_service import DataService
+from core.services.data_service import DataService
 from core.services.data_validator import DataSchemaValidator
 from core.services.model_config import ModelConfig
 from core.services.response_generator import ResponseGenerator
