@@ -1,78 +1,52 @@
-"""
-Path: componente_flask/services/response_generator.py
-Este módulo contiene una clase que genera respuestas utilizando un modelo de lenguaje generativo,
-manteniendo la lógica independiente de cualquier canal específico (web, Telegram, etc.).
-"""
-
+from typing import Optional
 from core.logs.config_logger import LoggerConfigurator
 from core.services.model_config import ModelConfig
+from core.services.llm_impl.gemini_llm import GeminiLLMClient  # Add this import
 
-# Configuración del logger
 logger = LoggerConfigurator().configure()
 
 class ResponseGenerator:
-    """
-    Clase que genera respuestas utilizando un modelo de lenguaje generativo.
-    """
-
-    def __init__(self, model_config: ModelConfig):
+    def __init__(self, llm_client=None, logger=None):
         """
-        Constructor que recibe una instancia de ModelConfig.
+        Flexible constructor supporting multiple initialization scenarios.
+        """
+        self.logger = logger or LoggerConfigurator().configure()
+        self.model_config = ModelConfig(logger=self.logger)
         
-        :param model_config: Instancia de la clase ModelConfig que contiene
-                             la configuración del modelo generativo.
+        # Use the LLM client if provided, otherwise create a new one
+        self.model = llm_client or self.model_config.create_llm_client()
+        
+        # Wrap Gemini client to provide required interface
+        if isinstance(self.model, GeminiLLMClient):
+            self.model.start_chat = self._gemini_start_chat
+        
+        self.logger.info("ResponseGenerator initialized")
+
+    def _gemini_start_chat(self):
         """
-        self.model_config = model_config
-        self.model = self.model_config.model
-        logger.info("ResponseGenerator inicializado con el modelo configurado.")
+        Custom method to simulate start_chat for Gemini client
+        """
+        class ChatSession:
+            def __init__(self, model):
+                self.model = model
+            
+            def send_message(self, message):
+                response_text = self.model.send_message(message)
+                return type('Response', (object,), {'text': response_text})()
+        
+        return ChatSession(self.model)
 
     def generate_response(self, message_input: str) -> str:
-        """
-        Genera una respuesta en base al mensaje de entrada, sin preocuparse
-        por el canal desde el que proviene.
-
-        :param message_input: El texto del mensaje de entrada.
-        :return: El texto de la respuesta generada por el modelo.
-        """
-        logger.info("Generando respuesta para el mensaje: %s", message_input)
-        self._start_chat_session()
+        """Generate a response from the input message."""
+        self.logger.info(f"Generating response for: {message_input}")
         try:
-            response = self.chat_session.send_message(message_input)
-            logger.info("Respuesta generada: %s", response.text)
+            chat_session = self.model.start_chat()
+            response = chat_session.send_message(message_input)
             return response.text
         except Exception as e:
-            logger.error("Error durante la generación de la respuesta: %s", e)
+            self.logger.error(f"Response generation error: {e}")
             raise
 
     def generate_response_streaming(self, message_input: str, chunk_size: int = 30) -> str:
-        """
-        Genera una respuesta en bloques de texto (streaming). La función retorna todo el texto al final,
-        pero internamente se divide en pequeños trozos para simular una lógica de streaming.
-        
-        :param message_input: El texto del mensaje de entrada.
-        :param chunk_size: Tamaño de cada bloque que se lee del texto.
-        :return: Todo el texto de la respuesta generada, concatenado.
-        """
-        logger.info("Generando respuesta en modo streaming para el mensaje: %s", message_input)
-        self._start_chat_session()
-        response = self.chat_session.send_message(message_input)
-
-        offset = 0
-        full_response = ""
-        while offset < len(response.text):
-            chunk = response.text[offset:offset + chunk_size]
-            full_response += chunk
-            # Loguea cada chunk para fines de debug, sin limpiar consola
-            logger.debug("Chunk generado: %s", chunk)
-            offset += chunk_size
-
-        logger.info("Respuesta completa (streaming simulada): %s", full_response)
-        return full_response
-
-    def _start_chat_session(self) -> None:
-        """
-        Inicia una nueva sesión de chat si no existe una.
-        """
-        if not hasattr(self, 'chat_session'):
-            self.chat_session = self.model.start_chat()
-            logger.info("Sesión de chat iniciada con el modelo generativo.")
+        """Simulate streaming response generation."""
+        return self.generate_response(message_input)
