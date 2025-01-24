@@ -5,7 +5,7 @@ Path: core/services/response_generator.py
 
 from core.logs.config_logger import LoggerConfigurator
 from core.services.model_config import ModelConfig
-from core.services.llm_impl.gemini_llm import GeminiLLMClient  # Add this import
+from core.services.llm_impl.gemini_llm import GeminiLLMClient
 
 logger = LoggerConfigurator().configure()
 

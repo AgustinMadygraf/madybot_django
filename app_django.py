@@ -6,10 +6,11 @@ Path: app_django.py
 import os
 import sys
 from dotenv import load_dotenv
-from core.logs.config_logger import LoggerConfigurator
 from django.core.management import execute_from_command_line
+from core.logs.config_logger import LoggerConfigurator
 
 def main():
+    "Entrypoint para iniciar el servidor Django."
     logger = LoggerConfigurator().configure()
     try:
         if not load_dotenv():

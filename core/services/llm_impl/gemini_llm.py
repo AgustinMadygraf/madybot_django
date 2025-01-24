@@ -12,6 +12,7 @@ from core.logs.config_logger import LoggerConfigurator
 _fallback_logger = LoggerConfigurator().configure()
 
 class GeminiLLMClient(ILLMClient):
+    " Cliente para interactuar con el modelo Gemini de Google. "
     def __init__(self, api_key: str, system_instruction: str, logger=None):
         """
         Inicializa el cliente para Gemini, configurando la API key y el modelo.
@@ -25,7 +26,10 @@ class GeminiLLMClient(ILLMClient):
         self.logger = logger if logger else _fallback_logger
 
         # Configurar la librería 'google.generativeai'
-        genai.configure(api_key=self.api_key)
+        try:
+            genai.configure(api_key=self.api_key)
+        except AttributeError as e:
+            raise AttributeError(f'El modelo no tiene el método esperado: {e}') from e
 
         self.model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
