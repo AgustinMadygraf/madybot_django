@@ -19,14 +19,20 @@ Chatbot conversacional que aspira a tener múltiples agentes. En principio, tien
     cd madybot_flask
     ```
 
-2. Configura el entorno virtual usando Pipenv:
+2. Crea un entorno virtual:
     ```bash
-    pipenv shell
+    virtualenv -p python3 env
     ```
 
-3. Instala las dependencias:
+3. Activa el entorno virtual:
     ```bash
-    pipenv install
+    # En Windows
+    .\env\Scripts\Activate
+    ```
+
+4. Instala las dependencias:
+    ```bash
+    pip install -r requirements.txt
     ```
 
 ## Ejecución
@@ -40,25 +46,27 @@ Chatbot conversacional que aspira a tener múltiples agentes. En principio, tien
 
 ```
 madybot_flask/
-├── app/
-│   ├── __init__.py
-│   ├── routes.py
-│   ├── models.py
-│   └── ...
-├── tests/
-│   └── test_app.py
-├── Pipfile
-├── Pipfile.lock
+├── core/
+│   ├── logs/
+│   ├── services/
+│   └── utils/
+├── env/
+├── .env
+├── .gitignore
+├── app_flask.py
 ├── readme.md
-└── ...
+└── requirements.txt
 ```
 
 ## Tecnologías Utilizadas
 
 - Python 3.x
 - Flask
-- MySQL
-- Pipenv
+- Flask-CORS
+- Python-dotenv
+- Google Generative AI
+- Marshmallow
+- Virtualenv
 
 ## Contribuciones
 
@@ -66,8 +74,4 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request p
 
 ## Autor
 
-[Tu Nombre](https://github.com/tu_usuario)
-
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT.
+[AgustinMadygraf](https://github.com/AgustinMadygraf)

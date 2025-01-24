@@ -39,7 +39,7 @@ except RuntimeError as e:
 
 if __name__ == '__main__':
     try:
-        app.run(host='0.0.0.0', port=5000)
+        app.run(debug=False, host='0.0.0.0', port=5000)
         logger.info("Servidor configurado para HTTP.")
     except (OSError, RuntimeError) as e:
         logger.error("Error al iniciar el servidor Flask: %s", e)
