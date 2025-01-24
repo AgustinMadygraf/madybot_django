@@ -10,7 +10,6 @@ from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any
 from pathlib import Path
 
-
 class ConfigStrategy(ABC):
     """Clase base para las estrategias de configuración del logger."""
     @abstractmethod
@@ -24,7 +23,6 @@ class ConfigStrategy(ABC):
     def another_method(self):
         """Another public method to satisfy pylint."""
         print("Another method")
-
 
 class JSONConfigStrategy(ConfigStrategy):
     """

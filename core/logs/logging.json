@@ -15,12 +15,19 @@
             "level": "DEBUG",
             "filters": ["exclude_http_logs"],
             "formatter": "simpleFormatter"
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "filename": "core/logs/sistema.log",
+            "formatter": "simpleFormatter",
+            "encoding": "utf8"
         }
     },
     "loggers": {
         "": {
             "level": "DEBUG",
-            "handlers": ["console"]
+            "handlers": ["console", "file"]
         }
     },
     "formatters": {

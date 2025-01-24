@@ -1,6 +1,5 @@
 """
 Path: app_flask.py
-
 """
 
 import sys
@@ -9,6 +8,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from core.data_controller import data_controller
 from core.logs.config_logger import LoggerConfigurator
+from core.services.url_service import UrlService
 
 # Configuración del logger al inicio del script
 logger = LoggerConfigurator().configure()
@@ -37,7 +37,19 @@ except RuntimeError as e:
     logger.error("Error al registrar el blueprint: %s", e)
     sys.exit(1)
 
+# Crear instancia del servicio
+url_service = UrlService()
+
 if __name__ == '__main__':
+    print("Starting Flask server...")
+    try:
+        url = url_service.get_public_url()
+        url_service.save_url(url)
+        logger.info("URL enviada correctamente.")
+    except (ConnectionError, ValueError) as e:
+        logger.error("Error al ejecutar el servicio de URL: %s", e)
+
+    # Finalmente iniciar Flask
     try:
         app.run(debug=False, host='0.0.0.0', port=5000)
         logger.info("Servidor configurado para HTTP.")
