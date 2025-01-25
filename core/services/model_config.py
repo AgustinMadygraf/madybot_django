@@ -20,7 +20,7 @@ load_dotenv()
 try:
     from core.logs.dependency_injection import app_logger as default_logger
 except ImportError:
-    from core.logs.config_logger import LoggerConfigurator
+    from core.logs.logger_configurator import LoggerConfigurator
     default_logger = LoggerConfigurator().configure()
 
 class ModelConfig:

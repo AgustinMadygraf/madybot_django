@@ -6,7 +6,7 @@ Path: services/url_service.py
 import subprocess
 import time
 import requests
-from core.logs.config_logger import LoggerConfigurator
+from core.logs.logger_configurator import LoggerConfigurator
 
 # Configuración del logger al inicio del script
 logger = LoggerConfigurator().configure()

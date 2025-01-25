@@ -1,23 +1,32 @@
 """
 Path: core/services/llm_client.py
-Interfaz ILLMClient para clientes LLM.
+
+Definición de interfaces (ISP):
+- IBaseLLMClient: interfaz base con el método esencial de envío de mensajes.
+- IStreamingLLMClient: extiende de IBaseLLMClient e incluye envío en modo streaming.
 """
 
 from abc import ABC, abstractmethod
 
-class ILLMClient(ABC):
-    "Esta clase define la interfaz para los clientes LLM."
+class IBaseLLMClient(ABC):
+    """
+    Interfaz base para clientes LLM.
+    Solo define la operación esencial de enviar un mensaje.
+    """
     @abstractmethod
     def send_message(self, message: str) -> str:
         """
         Envía un mensaje al modelo LLM y retorna la respuesta completa en texto.
         """
-        print("send_message")
+        print("Enviando mensaje...")
 
+class IStreamingLLMClient(IBaseLLMClient, ABC):
+    """
+    Interfaz para clientes LLM que también soportan envío de mensajes en modo streaming.
+    """
     @abstractmethod
     def send_message_streaming(self, message: str, chunk_size: int = 30) -> str:
         """
-        Envía un mensaje al modelo LLM y retorna la respuesta
-        en modo streaming (concatenada finalmente).
+        Envía un mensaje al modelo LLM y retorna la respuesta en modo streaming.
         """
-        print("send_message_streaming")
+        print("Enviando mensaje en modo streaming...")

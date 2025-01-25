@@ -1,26 +1,27 @@
 """
-Path: componente_flask/services/llm_impl/gemini_llm.py
-Implementación de ILLMClient utilizando la API de Gemini,
-aceptando un logger inyectado opcionalmente.
+Path: core/services/llm_impl/gemini_llm.py
+
+Implementación de IStreamingLLMClient utilizando la API de Gemini.
+Acepta un logger inyectado opcionalmente.
 """
 
 import google.generativeai as genai
-from core.services.llm_client import ILLMClient
-from core.logs.config_logger import LoggerConfigurator
+from core.services.llm_client import IStreamingLLMClient
+from core.logs.logger_configurator import LoggerConfigurator
 
-# Este logger solo se usará como fallback si no se inyecta uno.
+# Logger por defecto si no se inyecta uno externo.
 _fallback_logger = LoggerConfigurator().configure()
 
-class GeminiLLMClient(ILLMClient):
-    " Encapsula la lógica de interacción con el modelo de Gemini. "
+class GeminiLLMClient(IStreamingLLMClient):
+    """
+    Encapsula la lógica de interacción con el modelo de Gemini,
+    implementando envío de mensajes y streaming.
+    """
     def __init__(self, api_key: str, system_instruction: str, logger=None):
         """
-        Inicializa el cliente para Gemini, configurando la API key y el modelo.
-        
-        :param api_key: La clave de API para Gemini
-        :param system_instruction: Instrucciones del sistema, a modo de prompt inicial.
-        :param logger: (Opcional) Logger inyectado desde afuera. Si no se provee,
-                       se utilizará un logger por defecto.
+        :param api_key: La clave de API para Gemini.
+        :param system_instruction: Instrucciones del sistema (prompt inicial).
+        :param logger: (Opcional) Logger inyectado. Usa _fallback_logger si no se provee.
         """
         self.api_key = api_key
         self.logger = logger if logger else _fallback_logger
@@ -45,7 +46,7 @@ class GeminiLLMClient(ILLMClient):
 
     def send_message(self, message: str) -> str:
         """
-        Envía un mensaje al modelo y retorna la respuesta en texto.
+        Envía un mensaje al modelo y retorna la respuesta completa en texto.
         """
         self._start_chat_session()
         try:

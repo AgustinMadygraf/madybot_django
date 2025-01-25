@@ -1,6 +1,9 @@
+config/config.json
 docs/00-Prompt-for-ProjectAnalysis.md
 core/logs/sistema.log
 .env
+
+env/
 core/__pycache__/
 core/channels/__pycache__/
 core/logs/__pycache__/
@@ -10,4 +13,4 @@ core/services/llm_impl/__pycache__/
 core/utils/__pycache__/
 madybot_django/__pycache__/
 tests/__pycache__/
-env/
+core/config/__pycache__/
