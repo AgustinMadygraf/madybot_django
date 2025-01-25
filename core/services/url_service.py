@@ -3,11 +3,9 @@ Path: services/url_service.py
 
 """
 
-import os
 import subprocess
 import time
 import requests
-from dotenv import load_dotenv
 from core.logs.config_logger import LoggerConfigurator
 
 # Configuración del logger al inicio del script
@@ -16,8 +14,8 @@ logger.debug("Logger configurado correctamente al inicio del servidor.")
 
 class UrlService:
     " Servicio para obtener y guardar la URL pública de ngrok "
-    def __init__(self):
-        pass
+    def __init__(self, endpoint_ngrok_php):
+        self.endpoint_ngrok_php = endpoint_ngrok_php
 
     def get_public_url(self):
         """
@@ -34,16 +32,10 @@ class UrlService:
         """
         if not url:
             raise ValueError("La URL proporcionada está vacía")
-        save_url(url)
+        save_url(url, self.endpoint_ngrok_php)
 
-# Cargar variables de entorno desde el archivo .env
-load_dotenv()
-ENDPOINT_NGROK_PHP = os.getenv("ENDPOINT_NGROK_PHP")+"/profebot_php/app/views/index.php"
-#ENDPOINT_NGROK_PHP = os.getenv("ENDPOINT_NGROK_PHP")+"/MadyBot_PHP/app/views/index.php"
-
-def save_url(url_to_save):
+def save_url(url_to_save, endpoint):
     "Envía una URL a un servidor remoto"
-    endpoint = ENDPOINT_NGROK_PHP
     # Datos a enviar
     data = {
         'url': url_to_save

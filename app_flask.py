@@ -1,11 +1,12 @@
 """
 Path: app_flask.py
+
 """
 
 import sys
+import json
 from flask import Flask
 from flask_cors import CORS
-from dotenv import load_dotenv
 from core.data_controller import data_controller
 from core.logs.config_logger import LoggerConfigurator
 from core.services.url_service import UrlService
@@ -14,16 +15,18 @@ from core.services.url_service import UrlService
 logger = LoggerConfigurator().configure()
 logger.debug("Logger configurado correctamente al inicio del servidor.")
 
-# Cargar variables de entorno desde el archivo .env
+# Cargar variables de configuración desde el archivo config.json
 try:
-    logger.debug("Intentando cargar el archivo .env")
-    if not load_dotenv():
-        raise FileNotFoundError(".env file not found")
-    logger.debug(".env file cargado correctamente")
+    logger.debug("Intentando cargar el archivo config.json")
+    with open('config/config.json', 'r', encoding='utf-8') as config_file:
+        config = json.load(config_file)
+    logger.debug("config.json cargado correctamente")
 except FileNotFoundError as e:
-    logger.error("Error loading .env file: %s", e)
-    logger.debug("Asegúrate de que el archivo .env existe en el directorio raíz del proyecto")
-    print("Please create a .env file with the necessary environment variables.")
+    logger.error("Error loading config.json file: %s", e)
+    logger.debug("""
+                 Asegúrate de que el archivo config.json existe en el directorio config del proyecto
+                 """)
+    print("Please create a config.json file with the necessary configuration variables.")
     sys.exit(1)
 
 app = Flask(__name__)
@@ -38,7 +41,7 @@ except RuntimeError as e:
     sys.exit(1)
 
 # Crear instancia del servicio
-url_service = UrlService()
+url_service = UrlService(config['ENDPOINT_NGROK_PHP'])
 
 if __name__ == '__main__':
     print("Starting Flask server...")
@@ -51,7 +54,7 @@ if __name__ == '__main__':
 
     # Finalmente iniciar Flask
     try:
-        app.run(debug=False, host='0.0.0.0', port=5000)
+        app.run(debug=config['IS_DEVELOPMENT'], host='0.0.0.0', port=5000)
         logger.info("Servidor configurado para HTTP.")
     except (OSError, RuntimeError) as e:
         logger.error("Error al iniciar el servidor Flask: %s", e)

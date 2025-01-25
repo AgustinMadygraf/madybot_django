@@ -1,0 +1,4 @@
+{
+    "IS_DEVELOPMENT": true,
+    "ENDPOINT_NGROK_PHP": "https://www.profebustos.com.ar/"
+}

@@ -12,6 +12,7 @@ from core.logs.config_logger import LoggerConfigurator
 _fallback_logger = LoggerConfigurator().configure()
 
 class GeminiLLMClient(ILLMClient):
+    " Encapsula la lógica de interacción con el modelo de Gemini. "
     def __init__(self, api_key: str, system_instruction: str, logger=None):
         """
         Inicializa el cliente para Gemini, configurando la API key y el modelo.
