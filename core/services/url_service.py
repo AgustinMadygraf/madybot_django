@@ -3,9 +3,13 @@ Path: services/url_service.py
 
 """
 
+import sys
+import os
 import subprocess
 import time
 import requests
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 from core.logs.logger_configurator import LoggerConfigurator
 
 # Configuración del logger al inicio del script
@@ -21,18 +25,18 @@ class UrlService:
         """
         Obtiene la URL pública de ngrok.
         """
-        url = get_url_ngrok()
-        if not url:
+        public_url = get_url_ngrok()
+        if not public_url:
             raise ValueError("No se pudo obtener la URL de ngrok")
-        return url
+        return public_url
 
-    def save_url(self, url):
+    def save_url(self, public_url):
         """
         Guarda la URL pública en un servidor remoto.
         """
-        if not url:
+        if not public_url:
             raise ValueError("La URL proporcionada está vacía")
-        save_url(url, self.endpoint_ngrok_php)
+        save_url(public_url, self.endpoint_ngrok_php)
 
 def save_url(url_to_save, endpoint):
     "Envía una URL a un servidor remoto"
@@ -91,3 +95,10 @@ def get_url_ngrok():
         raise RuntimeError(f"Error al iniciar ngrok: {e}") from e
     except Exception as e:
         raise RuntimeError(f"Error inesperado al obtener la URL de ngrok: {e}") from e
+
+
+if __name__ :
+    url_service = UrlService('http://localhost:8000/api/url')
+    url = url_service.get_public_url()
+    url_service.save_url(url)
+    print(url)

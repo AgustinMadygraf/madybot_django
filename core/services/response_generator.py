@@ -5,52 +5,53 @@ Path: core/services/response_generator.py
 
 from core.logs.logger_configurator import LoggerConfigurator
 from core.services.model_config import ModelConfig
-from core.services.llm_impl.gemini_llm import GeminiLLMClient  # Add this import
+from core.services.llm_client import IBaseLLMClient, IStreamingLLMClient
 
-logger = LoggerConfigurator().configure()
 
 class ResponseGenerator:
-    "Esta clase se encarga de generar respuestas a partir de un mensaje de entrada."
-    def __init__(self, llm_client=None, custom_logger=None):
+    """
+    Clase encargada de generar respuestas a partir de un mensaje de entrada.
+    Es agnóstica al tipo de LLM que se le inyecte.
+    """
+
+    def __init__(self, llm_client: IBaseLLMClient = None, custom_logger=None):
         """
-        Flexible constructor supporting multiple initialization scenarios.
+        Constructor que admite inyección de dependencia (llm_client).
+        Si no se provee, se crea usando ModelConfig (por defecto, Gemini u otro).
         """
         self.logger = custom_logger or LoggerConfigurator().configure()
         self.model_config = ModelConfig(logger=self.logger)
-        # Use the LLM client if provided, otherwise create a new one
-        self.model = llm_client or self.model_config.create_llm_client()
-        # Wrap Gemini client to provide required interface
-        if isinstance(self.model, GeminiLLMClient):
-            self.model.start_chat = self._gemini_start_chat
-        self.logger.info("ResponseGenerator initialized")
 
-    def _gemini_start_chat(self):
-        "Custom method to simulate start_chat for Gemini client"
-        class ChatSession:
-            "Wrapper class for GeminiLLMClient to provide required interface."
-            def __init__(self, model):
-                self.model = model
-            def send_message(self, message):
-                "Send a message to the model and return the response."
-                response_text = self.model.send_message(message)
-                return type('Response', (object,), {'text': response_text})()
-            def another_public_method(self):
-                "Placeholder method to satisfy pylint."
-                print("This is a placeholder method.")
+        # Usa el cliente LLM que se provee, o crea uno por defecto desde ModelConfig
+        self.model = llm_client if llm_client else self.model_config.create_llm_client()
 
-        return ChatSession(self.model)
+        self.logger.info("ResponseGenerator initialized con un cliente LLM inyectado.")
 
     def generate_response(self, message_input: str) -> str:
-        """Generate a response from the input message."""
-        self.logger.info(f"Generating response for: {message_input}")
+        """
+        Genera una respuesta no-streaming para un mensaje dado.
+        """
+        self.logger.info(f"Generando respuesta para el mensaje: {message_input}")
         try:
-            chat_session = self.model.start_chat()
-            response = chat_session.send_message(message_input)
-            return response.text
+            return self.model.send_message(message_input)
         except Exception as e:
-            self.logger.error("Response generation error: %s", e)
+            self.logger.error("Error al generar respuesta: %s", e)
             raise
 
-    def generate_response_streaming(self, message_input: str) -> str:
-        """Simulate streaming response generation."""
-        return self.generate_response(message_input)
+    def generate_response_streaming(self, message_input: str, chunk_size: int = 30) -> str:
+        """
+        Genera una respuesta en modo streaming, si el cliente lo soporta.
+        Caso contrario, recurre a la generación no-streaming.
+        """
+        self.logger.info(f"Generando respuesta en streaming para: {message_input}")
+        try:
+            if isinstance(self.model, IStreamingLLMClient):
+                return self.model.send_message_streaming(message_input, chunk_size)
+            else:
+                # Si el modelo no soporta streaming, se usa la forma estándar
+                self.logger.warning("""El cliente LLM no soporta streaming.
+                                    Usando send_message normal.""")
+                return self.model.send_message(message_input)
+        except Exception as e:
+            self.logger.error("Error al generar respuesta en streaming: %s", e)
+            raise

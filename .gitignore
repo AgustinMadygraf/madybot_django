@@ -14,3 +14,4 @@ core/utils/__pycache__/
 madybot_django/__pycache__/
 tests/__pycache__/
 core/config/__pycache__/
+core/launcher/__pycache__/
