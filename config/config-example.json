@@ -1,4 +1,17 @@
 {
+    "_Path:" : "config/config.json",
     "IS_DEVELOPMENT": true,
-    "ENDPOINT_NGROK_PHP": "https://www.profebustos.com.ar/"
+    "ENDPOINT_NGROK_PHP": "https://www.profebustos.com.ar/",
+    "MODELS": {
+        "OpenAI": ["GPT-4", "GPT-4o", "GPT-o1"],
+        "Google": ["gemini-1.5-flash"],
+        "DeepSeek": ["DeepSeek"],
+        "Anthropic": ["Sonnet"],
+        "Meta": ["Llama 2", "OPT"]
+    },
+    "SELECTED_MODEL": {
+        "COMPANY": "Google",
+        "MODEL": "gemini-1.5-flash"
+    }
 }
+

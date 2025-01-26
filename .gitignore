@@ -1,6 +1,7 @@
 config/config.json
 docs/00-Prompt-for-ProjectAnalysis.md
 core/logs/sistema.log
+config/config.json
 .env
 
 env/
