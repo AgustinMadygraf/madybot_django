@@ -1,18 +1,14 @@
 config/config.json
 docs/00-Prompt-for-ProjectAnalysis.md
-core/logs/sistema.log
+app/core_logs/sistema.log
 config/config.json
 .env
 
-env/
-core/__pycache__/
-core/channels/__pycache__/
-core/logs/__pycache__/
-core/migrations/__pycache__/
-core/services/__pycache__/
-core/services/llm_impl/__pycache__/
-core/utils/__pycache__/
-madybot_django/__pycache__/
-tests/__pycache__/
-core/config/__pycache__/
-core/launcher/__pycache__/
+app/__pycache__/
+app/core_channels/__pycache__/
+app/core_config/__pycache__/
+app/core_logs/__pycache__/
+app/core_services/__pycache__/
+app/core_services/llm_impl/__pycache__/
+app/core_utils/__pycache__/
+

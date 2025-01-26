@@ -3,10 +3,10 @@
 4.1 **Crear clase o función `ServerLauncher`**  
    - **Objetivo**: Extraer la lógica de arranque de Flask en un lugar dedicado.  
    - **Acciones**:  
-     - Crear un nuevo archivo `core/launcher/server_launcher.py` para iniciar el servidor.  
+     - Crear un nuevo archivo `app/launcher/server_launcher.py` para iniciar el servidor.  
      - Invocar la lectura de configuración desde `flask_config.py` y registrar el blueprint.  
    - **Archivos a crear**:  
-     - `core/launcher/server_launcher.py`.  
+     - `app/launcher/server_launcher.py`.  
    - **Archivos a modificar**:  
      - `app_flask.py` (Se quedará casi vacío; solo llamará a `ServerLauncher`).
 
@@ -16,7 +16,7 @@
      - En `ServerLauncher`, envolver la llamada al servicio `UrlService` en un try-catch.  
      - Definir un fallback (por ejemplo, usar `localhost`) si no funciona la obtención de la URL.  
    - **Archivos a modificar**:  
-     - `core/launcher/server_launcher.py`.  
+     - `app/launcher/server_launcher.py`.  
 
 ---
 

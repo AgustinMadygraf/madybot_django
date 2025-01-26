@@ -1,0 +1,57 @@
+"""
+Path: app/services/response_generator.py
+
+"""
+
+from app.core_logs.logger_configurator import LoggerConfigurator
+from app.core_services.model_config import ModelConfig
+from app.core_services.llm_client import IBaseLLMClient, IStreamingLLMClient
+
+
+class ResponseGenerator:
+    """
+    Clase encargada de generar respuestas a partir de un mensaje de entrada.
+    Es agnóstica al tipo de LLM que se le inyecte.
+    """
+
+    def __init__(self, llm_client: IBaseLLMClient = None, custom_logger=None):
+        """
+        Constructor que admite inyección de dependencia (llm_client).
+        Si no se provee, se crea usando ModelConfig (por defecto, Gemini u otro).
+        """
+        self.logger = custom_logger or LoggerConfigurator().configure()
+        self.model_config = ModelConfig(logger=self.logger)
+
+        # Usa el cliente LLM que se provee, o crea uno por defecto desde ModelConfig
+        self.model = llm_client if llm_client else self.model_config.create_llm_client()
+
+        self.logger.info("ResponseGenerator initialized con un cliente LLM inyectado.")
+
+    def generate_response(self, message_input: str) -> str:
+        """
+        Genera una respuesta no-streaming para un mensaje dado.
+        """
+        self.logger.info(f"Generando respuesta para el mensaje: {message_input}")
+        try:
+            return self.model.send_message(message_input)
+        except Exception as e:
+            self.logger.error("Error al generar respuesta: %s", e)
+            raise
+
+    def generate_response_streaming(self, message_input: str, chunk_size: int = 30) -> str:
+        """
+        Genera una respuesta en modo streaming, si el cliente lo soporta.
+        Caso contrario, recurre a la generación no-streaming.
+        """
+        self.logger.info(f"Generando respuesta en streaming para: {message_input}")
+        try:
+            if isinstance(self.model, IStreamingLLMClient):
+                return self.model.send_message_streaming(message_input, chunk_size)
+            else:
+                # Si el modelo no soporta streaming, se usa la forma estándar
+                self.logger.warning("""El cliente LLM no soporta streaming.
+                                    Usando send_message normal.""")
+                return self.model.send_message(message_input)
+        except Exception as e:
+            self.logger.error("Error al generar respuesta en streaming: %s", e)
+            raise

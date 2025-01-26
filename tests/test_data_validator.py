@@ -5,7 +5,7 @@ Path: tests/test_data_validator.py
 
 import pytest
 from marshmallow.exceptions import ValidationError
-from core.services.data_validator import DataSchemaValidator
+from app.core_services.data_validator import DataSchemaValidator
 
 @pytest.fixture
 def valid_data():

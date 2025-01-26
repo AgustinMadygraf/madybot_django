@@ -4,10 +4,10 @@ Path: tests/test_data_service.py
 """
 
 from unittest.mock import Mock
-from core.services.data_service import DataService
-from core.services.response_generator import ResponseGenerator
-from core.services.data_validator import DataSchemaValidator
-from core.channels.imessaging_channel import IMessagingChannel
+from app.core_services.data_service import DataService
+from app.core_services.response_generator import ResponseGenerator
+from app.core_services.data_validator import DataSchemaValidator
+from app.channels.imessaging_channel import IMessagingChannel
 
 def test_process_valid_data():
     " Prueba para procesar datos válidos. "

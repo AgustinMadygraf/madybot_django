@@ -46,7 +46,7 @@ Chatbot conversacional que aspira a tener múltiples agentes. En principio, tien
 
 ```
 madybot_flask/
-├── core/
+├── app/
 │   ├── logs/
 │   ├── services/
 │   └── utils/
