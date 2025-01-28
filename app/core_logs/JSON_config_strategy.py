@@ -14,7 +14,7 @@ class JSONConfigStrategy(ConfigStrategy):
     Estrategia para cargar la configuración desde un archivo JSON
     con soporte para diferentes entornos.
     """
-    def __init__(self, config_path: str = 'app/logs/logging.json'):
+    def __init__(self, config_path: str = 'app/core_logs/logging.json'):
         """
         Inicializa la estrategia JSON con la ruta del archivo de configuración.
 
