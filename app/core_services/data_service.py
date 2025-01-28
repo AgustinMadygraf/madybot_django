@@ -54,7 +54,3 @@ class DataService:
         except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
-
-    def another_public_method(self):
-        "Este método es público y puede ser llamado desde cualquier parte."
-        print("Este método es público y puede ser llamado desde cualquier parte.")

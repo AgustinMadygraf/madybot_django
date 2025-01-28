@@ -50,20 +50,40 @@ def redirect_to_frontend():
     url_frontend = os.getenv('URL_FRONTEND')
     return redirect(url_frontend)
 
-@data_controller.route(root_API + 'receive-data', methods=['GET', 'POST', 'HEAD'])
+@data_controller.route(root_API + 'receive-data', methods=['POST', 'HEAD'])
 def receive_data():
     "Recibe los datos de la solicitud y los procesa con el DataService."
     if request.method == 'HEAD':
         return '', 200
 
-    if request.method == 'GET':
-        url_frontend = os.getenv('URL_FRONTEND')
-        return redirect(url_frontend)
+    try:
+        logger.info("Request JSON: \n| %s \n", request.json)
+        # Procesar la data con nuestro DataService
+        response_message = data_service.process_incoming_data(request.json)
+        logger.info("Respuesta generada: %s", response_message)
+        return render_json_response(200, response_message, stream=False)
+
+    except ValidationError as ve:
+        logger.error("Error de validación: %s", ve)
+        return render_json_response(400, "Datos inválidos en la solicitud.", stream=False)
+    except KeyError as ke:
+        logger.error("Error de clave: %s", ke)
+        return render_json_response(400, "Clave faltante en la solicitud.", stream=False)
+    except TypeError as te:
+        logger.error("Error de tipo: %s", te)
+        return render_json_response(400, "Tipo de dato incorrecto en la solicitud.", stream=False)
+    
+@data_controller.route(root_API + 'receive-data/', methods=['POST', 'HEAD'])
+def receive_data2():
+    "Recibe los datos de la solicitud y los procesa con el DataService."
+    if request.method == 'HEAD':
+        return '', 200
 
     try:
         logger.info("Request JSON: \n| %s \n", request.json)
         # Procesar la data con nuestro DataService
         response_message = data_service.process_incoming_data(request.json)
+        logger.info("Respuesta generada: %s", response_message)
         return render_json_response(200, response_message, stream=False)
 
     except ValidationError as ve:
@@ -79,6 +99,12 @@ def receive_data():
 
 @data_controller.route(root_API + 'health-check', methods=['GET'])
 def health_check():
+    "Verifica que el servidor esté funcionando correctamente."
+    logger.info("Health check solicitado. El servidor está funcionando correctamente.")
+    return render_json_response(200, "El servidor está operativo.")
+
+@data_controller.route(root_API + 'health-check/', methods=['GET'])
+def health_check2():
     "Verifica que el servidor esté funcionando correctamente."
     logger.info("Health check solicitado. El servidor está funcionando correctamente.")
     return render_json_response(200, "El servidor está operativo.")
