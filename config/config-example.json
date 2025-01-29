@@ -1,7 +1,9 @@
 {
     "_Path:" : "config/config.json",
-    "IS_DEVELOPMENT": true,
+    "IS_DEVELOPMENT": "False",
+    "root_API": "/API/V1/",
     "ENDPOINT_NGROK_PHP": "https://www.profebustos.com.ar/",
+    "url_frontend": "https://www.chat.profebustos.com.ar/",
     "MODELS": {
         "OpenAI": ["GPT-4", "GPT-4o", "GPT-o1"],
         "Google": ["gemini-1.5-flash"],

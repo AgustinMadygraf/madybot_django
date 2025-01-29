@@ -3,13 +3,9 @@ Path: services/url_service.py
 
 """
 
-import sys
-import os
 import subprocess
 import time
 import requests
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-
 from app.core_logs.logger_configurator import LoggerConfigurator
 
 # Configuración del logger al inicio del script
@@ -36,6 +32,7 @@ class UrlService:
         """
         if not public_url:
             raise ValueError("La URL proporcionada está vacía")
+
         save_url(public_url, self.endpoint_ngrok_php)
 
 def save_url(url_to_save, endpoint):
