@@ -7,7 +7,7 @@ import logging.config
 from typing import Optional
 
 # Asegúrate de que estas rutas sean correctas en tu proyecto:
-from app.core_logs.JSON_config_strategy import JSONConfigStrategy
+from app.core_logs.json_config_strategy import JSONConfigStrategy
 from app.core_logs.config_strategy import ConfigStrategy
 
 class LoggerConfigurator:

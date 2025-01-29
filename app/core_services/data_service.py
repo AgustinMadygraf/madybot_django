@@ -54,3 +54,6 @@ class DataService:
         except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
+    def another_method(self):
+        "Another method"
+        print("Another method")

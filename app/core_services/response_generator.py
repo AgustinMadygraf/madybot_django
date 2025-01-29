@@ -47,11 +47,7 @@ class ResponseGenerator:
         try:
             if isinstance(self.model, IStreamingLLMClient):
                 return self.model.send_message_streaming(message_input, chunk_size)
-            else:
-                # Si el modelo no soporta streaming, se usa la forma estándar
-                self.logger.warning("""El cliente LLM no soporta streaming.
-                                    Usando send_message normal.""")
-                return self.model.send_message(message_input)
+            return self.generate_response(message_input)
         except Exception as e:
             self.logger.error("Error al generar respuesta en streaming: %s", e)
             raise

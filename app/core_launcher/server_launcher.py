@@ -8,6 +8,7 @@ from app.core_config.flask_config import FlaskConfig
 from app.core_services.data_controller import data_controller
 
 class ServerLauncher:
+    "Clase para inicializar y lanzar el servidor Flask."
     def __init__(self):
         """Inicializa la configuración del servidor Flask."""
         self.flask_config = FlaskConfig()

@@ -1,5 +1,5 @@
 """
-Path: app/logs/JSON_config_strategy.py
+Path: app/logs/json_config_strategy.py
 
 """
 import os

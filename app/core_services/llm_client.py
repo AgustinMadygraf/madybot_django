@@ -20,6 +20,11 @@ class IBaseLLMClient(ABC):
         """
         print("Enviando mensaje...")
 
+    def another_method(self):
+        "Another method"
+        print("Another method")
+
+
 class IStreamingLLMClient(IBaseLLMClient, ABC):
     """
     Interfaz para clientes LLM que también soportan envío de mensajes en modo streaming.
@@ -30,3 +35,7 @@ class IStreamingLLMClient(IBaseLLMClient, ABC):
         Envía un mensaje al modelo LLM y retorna la respuesta en modo streaming.
         """
         print("Enviando mensaje en modo streaming...")
+
+    def another_method(self):
+        "Another method"
+        print("Another method")
