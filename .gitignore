@@ -12,3 +12,5 @@ app/core_services/__pycache__/
 app/core_services/llm_impl/__pycache__/
 app/core_utils/__pycache__/
 
+app/docs/00-Prompt-for-ProjectAnalysis.md
+app/core_launcher/__pycache__/server_launcher.cpython-311.pyc
