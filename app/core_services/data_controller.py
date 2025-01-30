@@ -47,16 +47,18 @@ config = flask_config.get_config()
 root_API = config['root_API']
 logger.info("Ruta raíz del API: %s", root_API)
 
-@data_controller.route(root_API, methods=['GET'])
+@data_controller.route(root_API + '/', methods=['GET'])
+@data_controller.route(           '/', methods=['GET'])
 def redirect_to_frontend():
     "Redirige al frontend en caso de que se acceda a la raíz del API."
     url_frontend = config['url_frontend']
     return redirect(url_frontend)
 
-@data_controller.route(root_API  +'receive-data' , methods=['POST', 'HEAD'])
-@data_controller.route(root_API  +'receive-data' , methods=['POST', 'HEAD'])
-@data_controller.route('/API/V1/'+'receive-data' , methods=['POST', 'HEAD'])
-@data_controller.route('/API/V1/'+'receive-data/', methods=['POST', 'HEAD'])
+
+@data_controller.route(root_API  +'receive-data'  , methods=['POST', 'HEAD'])
+@data_controller.route(root_API  +'receive-data'  , methods=['POST', 'HEAD'])
+@data_controller.route('/API/V1/'+'receive-data'  , methods=['POST', 'HEAD'])
+@data_controller.route('/API/V1/'+'receive-data/' , methods=['POST', 'HEAD'])
 @data_controller.route('/'       + 'receive-data' , methods=['POST', 'HEAD'])
 @data_controller.route('/'       + 'receive-data/', methods=['POST', 'HEAD'])
 
@@ -81,6 +83,7 @@ def receive_data():
     except TypeError as te:
         logger.error("Error de tipo: %s", te)
         return render_json_response(400, "Tipo de dato incorrecto en la solicitud.", stream=False)
+
 
 @data_controller.route(root_API  + 'health-check' , methods=['GET'])
 @data_controller.route(root_API  + 'health-check/', methods=['GET'])

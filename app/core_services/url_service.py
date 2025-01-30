@@ -19,8 +19,13 @@ class UrlService:
             raise ValueError("La URL proporcionada está vacía")
 
         self.logger.info("Enviando URL al servidor remoto...")
+        self.logger.info("URL: %s", public_url)
+        self.logger.info("Endpoint: %s", self.endpoint_ngrok_php)
+        self.logger.info("Enviando petición...")
         try:
             response = requests.get(self.endpoint_ngrok_php, params={'url': public_url}, timeout=10)
+            self.logger.info("Petición realizada a: %s con URL = %s", self.endpoint_ngrok_php, public_url)
+            self.logger.info("Respuesta: %s", response.text)
             if response.status_code == 200:
                 self.logger.info("URL enviada exitosamente.")
             else:

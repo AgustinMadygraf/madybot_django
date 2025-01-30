@@ -1,5 +1,5 @@
 """
-Path: app/services/response_generator.py
+Path: app/core_services/response_generator.py
 
 """
 
@@ -33,6 +33,8 @@ class ResponseGenerator:
         """
         self.logger.info(f"Generando respuesta para el mensaje: {message_input}")
         try:
+            if message_input.lower() == "hola":
+                return "¡Hola! ¿En qué puedo ayudarte hoy?"
             return self.model.send_message(message_input)
         except Exception as e:
             self.logger.error("Error al generar respuesta: %s", e)

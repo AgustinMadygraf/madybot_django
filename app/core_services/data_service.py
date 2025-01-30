@@ -51,6 +51,7 @@ class DataService:
                 return self.response_generator.generate_response_streaming(message_text)
             logger.info("Generando respuesta en modo normal.")
             return self.response_generator.generate_response(message_text)
+
         except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
