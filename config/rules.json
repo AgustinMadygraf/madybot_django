@@ -1,0 +1,17 @@
+{
+    "_path": "config/rules.json",
+    "rules": [
+        {
+            "keywords": ["hola", "holaa", "holaaa", "holiwis", "holis"],
+            "response": "¡Hola! ¿Cómo puedo ayudarte hoy?"
+        },
+        {
+            "keywords": ["quién eres", "quien sos", "qué eres", "quien rayos eres"],
+            "response": "Soy un asistente de inteligencia artificial diseñado para ayudarte."
+        },
+        {
+            "keywords": ["qué puedes hacer", "qué sabes hacer", "para qué sirves", "qué funciones tienes"],
+            "response": "Puedo responder preguntas, ayudar con tareas y mucho más."
+        }
+    ]
+}
