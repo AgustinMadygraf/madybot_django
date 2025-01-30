@@ -3,10 +3,10 @@ Path: app/core_services/response_generator.py
 
 """
 
-from app.core_logs.logger_configurator import LoggerConfigurator
-from app.core_services.model_config import ModelConfig
-from app.core_services.llm_client import IBaseLLMClient, IStreamingLLMClient
-from app.core_services.business_rules_engine import BusinessRulesEngine
+from app.utils.logging.logger_configurator import LoggerConfigurator
+from app.services.model_config import ModelConfig
+from app.services.llm_client import IBaseLLMClient, IStreamingLLMClient
+from app.services.business_rules_engine import BusinessRulesEngine
 
 class ResponseGenerator:
     """

@@ -4,8 +4,8 @@ Encargado de inicializar y lanzar el servidor Flask.
 """
 
 import sys
-from app.core_config.flask_config import FlaskConfig
-from app.core_services.data_controller import data_controller
+from app.config import FlaskConfig
+from app.blueprints.data.data_controller import data_controller
 
 class ServerLauncher:
     "Clase para inicializar y lanzar el servidor Flask."
@@ -33,9 +33,3 @@ class ServerLauncher:
         except (OSError, RuntimeError) as e:
             self.logger.error("Error al iniciar el servidor Flask: %s", e)
             sys.exit(1)
-
-# Si el script se ejecuta directamente, inicia el servidor
-if __name__ == '__main__':
-    server = ServerLauncher()
-    server.register_blueprints()
-    server.run()

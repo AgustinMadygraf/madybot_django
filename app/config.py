@@ -7,7 +7,7 @@ import json
 import sys
 from flask import Flask
 from flask_cors import CORS
-from app.core_logs.logger_configurator import LoggerConfigurator
+from app.utils.logging.logger_configurator import LoggerConfigurator
 
 
 class FlaskConfig:

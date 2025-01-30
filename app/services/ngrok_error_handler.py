@@ -5,7 +5,7 @@ Path: app/core_services/ngrok_error_handler.py
 import subprocess
 import time
 import platform
-from app.core_logs.logger_configurator import LoggerConfigurator
+from app.utils.logging.logger_configurator import LoggerConfigurator
 
 
 class NgrokErrorHandler:

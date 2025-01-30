@@ -10,7 +10,7 @@ Objetivo:
 
 import os
 from dotenv import load_dotenv
-from app.core_services.llm_impl.gemini_llm import GeminiLLMClient
+from app.services.llm_impl.gemini_llm import GeminiLLMClient
 
 # Intentamos cargar las variables de entorno.
 load_dotenv()
@@ -18,9 +18,9 @@ load_dotenv()
 # Intentamos usar el logger global si existe (en app/logs/dependency_injection),
 # en caso contrario, usamos uno local basado en LoggerConfigurator.
 try:
-    from app.core_logs.dependency_injection import app_logger as default_logger
+    from app.utils.logging.dependency_injection import app_logger as default_logger
 except ImportError:
-    from app.core_logs.logger_configurator import LoggerConfigurator
+    from app.utils.logging.logger_configurator import LoggerConfigurator
     default_logger = LoggerConfigurator().configure()
 
 class ModelConfig:

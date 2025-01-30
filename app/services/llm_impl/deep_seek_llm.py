@@ -8,8 +8,8 @@ No se maneja streaming, por lo que solo implementa envío de mensaje.
 import os
 from openai import OpenAI, AuthenticationError, OpenAIError
 from dotenv import load_dotenv
-from app.core_services.llm_client import IBaseLLMClient
-from app.core_logs.logger_configurator import LoggerConfigurator
+from app.services.llm_client import IBaseLLMClient
+from app.utils.logging.logger_configurator import LoggerConfigurator
 
 # Cargar API key desde variables de entorno
 load_dotenv()

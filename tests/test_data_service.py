@@ -4,9 +4,9 @@ Path: tests/test_data_service.py
 """
 
 from unittest.mock import Mock
-from app.core_services.data_service import DataService
-from app.core_services.response_generator import ResponseGenerator
-from app.core_services.data_validator import DataSchemaValidator
+from app.services.data_service import DataService
+from app.services.response_generator import ResponseGenerator
+from app.services.data_validator import DataSchemaValidator
 from app.channels.imessaging_channel import IMessagingChannel
 
 def test_process_valid_data():

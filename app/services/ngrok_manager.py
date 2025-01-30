@@ -3,9 +3,9 @@ Path: app/core_services/ngrok_manager.py
 """
 
 import time
-from app.core_logs.logger_configurator import LoggerConfigurator
-from app.core_services.ngrok_session import NgrokSession
-from app.core_services.ngrok_api import NgrokAPI
+from app.utils.logging.logger_configurator import LoggerConfigurator
+from app.services.ngrok_session import NgrokSession
+from app.services.ngrok_api import NgrokAPI
 
 class NgrokManager:
     """Clase que coordina el inicio de ngrok y la obtención de la URL pública."""

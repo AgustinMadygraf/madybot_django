@@ -3,10 +3,10 @@
     "disable_existing_loggers": false,
     "filters": {
         "info_error_filter": {
-            "()": "app.core_logs.info_error_filter.InfoErrorFilter"
+            "()": "app.utils.logging.info_error_filter.InfoErrorFilter"
         },
         "exclude_http_logs": {
-            "()": "app.core_logs.exclude_http_logs_filter.ExcludeHTTPLogsFilter"
+            "()": "app.utils.logging.exclude_http_logs_filter.ExcludeHTTPLogsFilter"
         }
     },
     "handlers": {
@@ -19,7 +19,7 @@
         "file": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
-            "filename": "app/core_logs/sistema.log",
+            "filename": "app/utils/logging/sistema.log",
             "formatter": "simpleFormatter",
             "encoding": "utf8"
         }

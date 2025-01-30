@@ -3,8 +3,8 @@ Path: app/channels/web_messaging_channel.py
 
 """
 
-from app.core_channels.imessaging_channel import IMessagingChannel
-from app.core_logs.logger_configurator import LoggerConfigurator
+from app.channels.imessaging_channel import IMessagingChannel
+from app.utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 

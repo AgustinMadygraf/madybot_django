@@ -5,10 +5,9 @@ Clase LoggerConfigurator mejorada para garantizar una única instancia y configu
 
 import logging.config
 from typing import Optional
-
-# Asegúrate de que estas rutas sean correctas en tu proyecto:
-from app.core_logs.json_config_strategy import JSONConfigStrategy
-from app.core_logs.config_strategy import ConfigStrategy
+import json
+from app.utils.logging.json_config_strategy import JSONConfigStrategy
+from app.utils.logging.config_strategy import ConfigStrategy
 
 class LoggerConfigurator:
     """Clase singleton para configurar el logger usando una estrategia y filtros dinámicos."""
@@ -56,23 +55,22 @@ class LoggerConfigurator:
             logging.Logger: Logger configurado.
         """
         if self._logger is not None:
-            # Ya está configurado, retornar el existente.
             return self._logger
 
         config = self.config_strategy.load_config()
 
         if config:
-            # Registrar filtros dinámicos en el dict antes de dictConfig.
             if 'filters' not in config:
                 config['filters'] = {}
+
 
             for name, filter_instance in self.filters.items():
                 config['filters'][name] = {
                     '()': f"{filter_instance.__class__.__module__}."
-                          f"{filter_instance.__class__.__name__}"
+                        f"{filter_instance.__class__.__name__}"
                 }
-
             try:
+                logging.debug(f"Logger configuration: {json.dumps(config, indent=4)}")
                 logging.config.dictConfig(config)
                 self._logger = logging.getLogger("app_logger")
             except ValueError as e:  # Error típico al usar dictConfig
@@ -82,9 +80,8 @@ class LoggerConfigurator:
             except (TypeError, AttributeError, ImportError, KeyError) as e:
                 logging.error(f"Error específico al aplicar la configuración: {e}")
                 self._use_default_config()
-        else:
-            # Si no hay config, usar configuración por defecto
-            self._use_default_config()
+            else:
+                self._use_default_config()
 
         return self._logger
 

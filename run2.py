@@ -4,10 +4,10 @@ Path: run_url_remote.py
 
 import time
 import subprocess
-from app.core_config.flask_config import FlaskConfig
-from app.core_logs.logger_configurator import LoggerConfigurator
-from app.core_services.ngrok_manager import NgrokManager
-from app.core_services.url_service import UrlService
+from app.config import FlaskConfig
+from app.utils.logging.logger_configurator import LoggerConfigurator
+from app.services.ngrok_manager import NgrokManager
+from app.services.url_service import UrlService
 
 logger = LoggerConfigurator().configure()
 
