@@ -1,12 +1,12 @@
 """
-Path: app/core_services/response_generator.py
+Path: app/components/services/response/response_generator.py
 
 """
 
 from app.utils.logging.logger_configurator import LoggerConfigurator
-from app.services.model_config import ModelConfig
-from app.services.llm_client import IBaseLLMClient, IStreamingLLMClient
-from app.services.business_rules_engine import BusinessRulesEngine
+from app.components.services.llm.model_config import ModelConfig
+from app.components.services.llm.llm_client import IBaseLLMClient, IStreamingLLMClient
+from app.components.services.business.business_rules_engine import BusinessRulesEngine
 
 class ResponseGenerator:
     """

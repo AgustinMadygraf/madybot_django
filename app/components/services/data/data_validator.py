@@ -1,5 +1,5 @@
 """
-Path: app/services/data_validator.py
+Path: app/components/services/data/data_validator.py
 Este módulo contiene un esquema de validación de datos
 y un validador para los datos recibidos en el controlador.
 """

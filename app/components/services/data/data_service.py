@@ -1,13 +1,13 @@
 """
-Path: componente_flask/services/data_service.py
+Path: app/components/services/data/data_service.py
 Servicio para manejar la lógica principal de recepción y procesamiento de datos.
 """
 
 from marshmallow import ValidationError
 from app.utils.logging.logger_configurator import LoggerConfigurator
-from app.services.data_validator import DataSchemaValidator
-from app.services.response_generator import ResponseGenerator
-from app.channels.imessaging_channel import IMessagingChannel
+from app.components.services.data.data_validator import DataSchemaValidator
+from app.components.services.response.response_generator import ResponseGenerator
+from app.components.channels.imessaging_channel import IMessagingChannel
 
 logger = LoggerConfigurator().configure()
 

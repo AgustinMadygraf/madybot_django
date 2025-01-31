@@ -1,9 +1,9 @@
 """
-Path: app/channels/web_messaging_channel.py
+Path: app/components/channels/web_messaging_channel.py
 
 """
 
-from app.channels.imessaging_channel import IMessagingChannel
+from app.components.channels.imessaging_channel import IMessagingChannel
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()

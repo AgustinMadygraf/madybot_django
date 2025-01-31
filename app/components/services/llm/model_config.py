@@ -1,5 +1,5 @@
 """
-Path: componente_flask/services/model_config.py
+Path: app/components/services/llm/model_config.py
 Factory o configuración para crear instancias de clientes LLM (Gemini u otros).
 
 Objetivo:
@@ -10,7 +10,7 @@ Objetivo:
 
 import os
 from dotenv import load_dotenv
-from app.services.llm_impl.gemini_llm import GeminiLLMClient
+from app.components.services.llm.llm_impl.gemini_llm import GeminiLLMClient
 
 # Intentamos cargar las variables de entorno.
 load_dotenv()
@@ -59,7 +59,7 @@ class ModelConfig:
         """
         instruction_file_path = os.path.join(
             os.path.dirname(__file__),
-            "..", "..", "config", "system_instruction.txt"
+            "..","..", "..", "..", "config", "system_instruction.txt"
         )
         instruction_file_path = os.path.abspath(instruction_file_path)
 

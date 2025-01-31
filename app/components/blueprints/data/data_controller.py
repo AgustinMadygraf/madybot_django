@@ -12,11 +12,11 @@ from app.utils.response import render_json_response
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 # Services y canales
-from app.services.data_service import DataService
-from app.services.data_validator import DataSchemaValidator
-from app.services.model_config import ModelConfig
-from app.services.response_generator import ResponseGenerator
-from app.channels.web_messaging_channel import WebMessagingChannel
+from app.components.services.data.data_service import DataService
+from app.components.services.data.data_validator import DataSchemaValidator
+from app.components.services.llm.model_config import ModelConfig
+from app.components.services.response.response_generator import ResponseGenerator
+from app.components.channels.web_messaging_channel import WebMessagingChannel
 from app.config import FlaskConfig
 
 logger = LoggerConfigurator().configure()

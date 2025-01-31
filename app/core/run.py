@@ -5,7 +5,7 @@ Encargado de inicializar y lanzar el servidor Flask.
 
 import sys
 from app.config import FlaskConfig
-from app.blueprints.data.data_controller import data_controller
+from app.components.blueprints.data.data_controller import data_controller
 
 class ServerLauncher:
     "Clase para inicializar y lanzar el servidor Flask."

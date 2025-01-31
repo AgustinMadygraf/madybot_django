@@ -6,7 +6,7 @@ Acepta un logger inyectado opcionalmente.
 """
 
 import google.generativeai as genai
-from app.services.llm_client import IStreamingLLMClient
+from app.components.services.llm.llm_client import IStreamingLLMClient
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 # Logger por defecto si no se inyecta uno externo.

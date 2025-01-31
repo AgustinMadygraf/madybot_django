@@ -4,7 +4,7 @@ Path: tests/test_gemini_llm.py
 """
 
 from unittest.mock import Mock
-from app.services.llm_impl.gemini_llm import GeminiLLMClient
+from app.components.services.llm_impl.gemini_llm import GeminiLLMClient
 
 def test_send_message():
     " Prueba para enviar un mensaje al cliente"

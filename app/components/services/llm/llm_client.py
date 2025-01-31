@@ -1,5 +1,5 @@
 """
-Path: app/services/llm_client.py
+Path: app/components/services/llm/llm_client.py
 
 Definición de interfaces (ISP):
 - IBaseLLMClient: interfaz base con el método esencial de envío de mensajes.

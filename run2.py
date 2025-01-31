@@ -6,8 +6,8 @@ import time
 import subprocess
 from app.config import FlaskConfig
 from app.utils.logging.logger_configurator import LoggerConfigurator
-from app.services.ngrok_manager import NgrokManager
-from app.services.url_service import UrlService
+from app.components.services.ngrok.ngrok_manager import NgrokManager
+from app.components.url.url_service import UrlService
 
 logger = LoggerConfigurator().configure()
 
