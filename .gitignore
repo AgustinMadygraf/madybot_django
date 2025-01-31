@@ -16,3 +16,4 @@ app/components/services/response/__pycache__/
 app/components/services/llm/__pycache__/
 app/components/services/ngrok/__pycache__/
 app/components/services/llm/llm_impl/__pycache__/
+app/utils/logging/docs/00-Prompt-for-ProjectAnalysis.md

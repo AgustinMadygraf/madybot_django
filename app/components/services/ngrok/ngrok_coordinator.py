@@ -1,5 +1,6 @@
 """
-Path: run_url_remote.py
+Path: app/components/services/ngrok/ngrok_coordinator.py
+
 """
 
 import time
@@ -53,6 +54,3 @@ class NgrokCoordinator:
             time.sleep(1)
             #actualizar los valores de localhost:4040
 
-if __name__ == "__main__":
-    coordinator = NgrokCoordinator()
-    coordinator.execute()

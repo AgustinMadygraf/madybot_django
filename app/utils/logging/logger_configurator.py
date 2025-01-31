@@ -69,6 +69,8 @@ class LoggerConfigurator:
                     '()': f"{filter_instance.__class__.__module__}."
                         f"{filter_instance.__class__.__name__}"
                 }
+            print(f"Filters: {self.filters}\n")
+            print(f"Config: {config}\n")
             try:
                 logging.debug(f"Logger configuration: {json.dumps(config, indent=4)}")
                 logging.config.dictConfig(config)
