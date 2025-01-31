@@ -4,7 +4,7 @@ Controlador Flask que se encarga de recibir las peticiones HTTP y delegar
 la lógica a DataService.
 """
 
-from flask import Blueprint, request, redirect
+from flask import Blueprint, request, redirect, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from marshmallow import ValidationError
@@ -95,3 +95,17 @@ def health_check():
     "Verifica que el servidor esté funcionando correctamente."
     logger.info("Health check solicitado. El servidor está funcionando correctamente.")
     return render_json_response(200, "El servidor está operativo.")
+
+@data_controller.route('/save_user', methods=['POST'])
+def save_user():
+    " Guarda los datos del usuario en la base de datos. "
+    user_data = request.json
+    user_id = data_service.save_user_data(user_data)
+    return jsonify({'user_id': user_id})
+
+@data_controller.route('/save_conversation', methods=['POST'])
+def save_conversation():
+    " Guarda los datos de la conversación en la base de datos. "
+    conversation_data = request.json
+    conversation_id = data_service.save_conversation(conversation_data)
+    return jsonify({'conversation_id': conversation_id})

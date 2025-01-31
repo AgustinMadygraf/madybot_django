@@ -8,6 +8,7 @@ from app.utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator
 from app.components.channels.imessaging_channel import IMessagingChannel
+#from app.utils.mysql_connector import MySQLConnector
 
 logger = LoggerConfigurator().configure()
 
@@ -22,6 +23,7 @@ class DataService:
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
+        #self.db = MySQLConnector()
 
     def process_incoming_data(self, json_data: dict) -> str:
         """
@@ -45,16 +47,62 @@ class DataService:
         message_text = processed_data.get('message')
         is_stream = processed_data.get('stream', False)
 
+        # Guardar datos del usuario y conversación en la base de datos
+        user_data = {
+            'id': valid_data.get('user_id'),
+            'name': valid_data.get('user_name'),
+            'email': valid_data.get('user_email')
+        }
+        conversation_data = {
+            'user_id': valid_data.get('user_id'),
+            'message': message_text,
+            'response': None  # La respuesta se actualizará después
+        }
+
+        #self.save_user_data(user_data)
+        #conversation_id = self.save_conversation(conversation_data)
+
         try:
             if is_stream:
                 logger.info("Generando respuesta en modo streaming.")
-                return self.response_generator.generate_response_streaming(message_text)
-            logger.info("Generando respuesta en modo normal.")
-            return self.response_generator.generate_response(message_text)
+                response = self.response_generator.generate_response_streaming(message_text)
+            else:
+                logger.info("Generando respuesta en modo normal.")
+                response = self.response_generator.generate_response(message_text)
+
+            # Actualizar la respuesta en la base de datos
+#            self.update_conversation_response(conversation_id, response)
+            return response
 
         except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
-    def another_method(self):
-        "Another method"
-        print("Another method")
+
+    def save_user_data(self, user_data):
+        " Guarda los datos del usuario en la base de datos. "
+        query = """
+        INSERT INTO users (user_id, user_name, user_email)
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE user_name=VALUES(user_name), user_email=VALUES(user_email)
+        """
+        params = (user_data['id'], user_data['name'], user_data['email'])
+        return self.db.execute_query(query, params)
+
+    def save_conversation(self, conversation_data):
+        " Guarda los datos de la conversación en la base de datos. "
+        query = """
+        INSERT INTO conversations (user_id, message, response)
+        VALUES (%s, %s, %s)
+        """
+        params = (conversation_data['user_id'], conversation_data['message'], conversation_data['response'])
+        return self.db.execute_query(query, params)
+
+    def update_conversation_response(self, conversation_id, response):
+        " Actualiza la respuesta de la conversación en la base de datos. "
+        query = """
+        UPDATE conversations
+        SET response = %s
+        WHERE id = %s
+        """
+        params = (response, conversation_id)
+        self.db.execute_query(query, params)

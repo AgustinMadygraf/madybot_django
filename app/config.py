@@ -1,14 +1,15 @@
 """
-Path: app/config/flask_config.py
-
+Path: app/config.py
+Este script se encarga de cargar la configuración de la aplicación Flask desde un archivo JSON.
 """
 
 import json
+import os
 import sys
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
 from app.utils.logging.logger_configurator import LoggerConfigurator
-
 
 class FlaskConfig:
     """
@@ -18,6 +19,7 @@ class FlaskConfig:
         self.logger = LoggerConfigurator().configure()
         self.config_path = config_path
         self.config = self._load_config()
+        self._load_env_variables()
 
     def _load_config(self):
         """
@@ -33,6 +35,18 @@ class FlaskConfig:
             self.logger.error("Error cargando el archivo de configuración: %s", e)
             print("Please create a config.json file with the necessary configuration variables.")
             sys.exit(1)
+
+    def _load_env_variables(self):
+        """
+        Carga las variables de entorno desde el archivo .env.
+        """
+        load_dotenv()
+        self.mysql_config = {
+            'host': os.getenv('MYSQL_HOST'),
+            'user': os.getenv('MYSQL_USER'),
+            'password': os.getenv('MYSQL_PASSWORD'),
+            'database': os.getenv('MYSQL_DATABASE')
+        }
 
     def create_app(self):
         """
