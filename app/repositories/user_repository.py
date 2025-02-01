@@ -1,57 +1,52 @@
 """
-Módulo de gestión de usuarios en la base de datos.
+Módulo de gestión de usuarios en la base de datos con SQLAlchemy.
 Ubicación: app/repositories/user_repository.py
 """
 
-from mysql.connector import Error
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+from sqlalchemy import Column, Integer, String
 from app.infrastructure.database_connection import DatabaseConnection
 from app.utils.logging.logger_configurator import LoggerConfigurator
+from sqlalchemy.ext.declarative import declarative_base
 
+# Configuración del logger
 logger = LoggerConfigurator().configure()
 
+# Base de SQLAlchemy
+Base = declarative_base()
+
+class User(Base):
+    """
+    Modelo SQLAlchemy para la tabla `users`.
+    """
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), unique=True, nullable=False)
+    user_name = Column(String(255), nullable=True)
+    user_email = Column(String(255), nullable=True)
+
 class UserRepository:
-    "Gestión de usuarios en la base de datos."
+    """
+    Repositorio de usuarios utilizando SQLAlchemy.
+    """
 
     def __init__(self):
-        self.db = DatabaseConnection()
-        self.connection = self.db.get_connection()
-        self._create_users_table()
-
-    def _create_users_table(self):
-        "Crea la tabla `users` si no existe."
-        try:
-            cursor = self.connection.cursor()
-            query = """
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(255) UNIQUE NOT NULL,
-                user_name VARCHAR(255),
-                user_email VARCHAR(255)
-            )
-            """
-            cursor.execute(query)
-            self.connection.commit()
-            logger.info("Tabla 'users' verificada o creada correctamente.")
-            cursor.close()
-        except Error as e:
-            logger.error("Error al crear/verificar la tabla 'users': %s", e)
+        self.session: Session = DatabaseConnection.get_session()
 
     def ensure_user_exists(self, user_id, user_name=None, user_email=None):
-        "Verifica si un usuario existe en la BD y lo inserta si no está."
+        """
+        Verifica si un usuario existe en la BD y lo inserta si no está.
+        """
         try:
-            cursor = self.connection.cursor()
-
-            # Verificar si el usuario ya existe
-            cursor.execute("SELECT user_id FROM users WHERE user_id = %s", (user_id,))
-            existing_user = cursor.fetchone()
+            existing_user = self.session.query(User).filter_by(user_id=user_id).first()
 
             if not existing_user:
-                cursor.execute(
-                    "INSERT INTO users (user_id, user_name, user_email) VALUES (%s, %s, %s)",
-                    (user_id, user_name, user_email)
-                )
-                self.connection.commit()
+                new_user = User(user_id=user_id, user_name=user_name, user_email=user_email)
+                self.session.add(new_user)
+                self.session.commit()
                 logger.info("Usuario %s insertado correctamente.", user_id)
-            cursor.close()
-        except Error as e:
+        except SQLAlchemyError as e:
+            self.session.rollback()
             logger.error("Error en ensure_user_exists: %s", e)

@@ -1,24 +1,22 @@
-### Nueva Estructura de Carpetas y Ubicación de Archivos
+# Plan de Trabajo para Mejoras en MadyBot Flask
 
-#### 4. **Servicios**
-- `app/services/`
-  - `__init__.py`
-  - `business_rules_engine.py` (mover desde `core_services/business_rules_engine.py`)
-  - `data_service.py` (mover desde `core_services/data_service.py`)
-  - `data_validator.py` (mover desde `core_services/data_validator.py`)
-  - `llm_client.py` (mover desde `core_services/llm_client.py`)
-  - `model_config.py` (mover desde `core_services/model_config.py`)
-  - `ngrok_api.py` (mover desde `core_services/ngrok_api.py`)
-  - `ngrok_error_handler.py` (mover desde `core_services/ngrok_error_handler.py`)
-  - `ngrok_manager.py` (mover desde `core_services/ngrok_manager.py`)
-  - `ngrok_session.py` (mover desde `core_services/ngrok_session.py`)
-  - `response_generator.py` (mover desde `core_services/response_generator.py`)
-  - `url_service.py` (mover desde `core_services/url_service.py`)
-  - `llm_impl/`
-    - `deep_seek_llm.py` (mover desde `core_services/llm_impl/deep_seek_llm.py`)
-    - `gemini_llm.py` (mover desde `core_services/llm_impl/gemini_llm.py`)
+## Objetivo Principal
+Aplicar principios SOLID y mejorar la cohesión en el código para optimizar la mantenibilidad y escalabilidad del proyecto sin comprometer la funcionalidad existente.
 
+---
 
-#### 9. **Estáticos y Plantillas**
-- `static/`
-- `templates/`
+## Tarea 3: (Opcional) Evaluar la Migración a un ORM
+**Objetivo:** Considerar el uso de una librería ORM para simplificar la persistencia.
+   
+### Subtareas:
+1. **Investigar y Seleccionar un ORM (por ejemplo, SQLAlchemy).**
+2. **Desarrollar un Prototipo de Integración en una Rama Separada.**
+
+---
+
+## Tarea 4: (Opcional) Implementar Nuevos Endpoints para Actualización de Datos
+**Objetivo:** Ampliar la funcionalidad mediante endpoints para actualizar usuarios y conversaciones.
+   
+### Subtareas:
+1. **Definir Nuevos Endpoints en DataController.**
+2. **Actualizar la Lógica en DataService y en el Servicio de Persistencia.**

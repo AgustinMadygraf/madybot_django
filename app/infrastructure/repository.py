@@ -1,48 +1,44 @@
 """
-Módulo de ejecución de consultas SQL.
-Ubicación: app/infrastructure/repository.py
+Path: app/infrastructure/repository.py
+Módulo de ejecución de consultas SQL utilizando SQLAlchemy.
 """
 
-from mysql.connector import Error
+from sqlalchemy.exc import SQLAlchemyError
 from app.infrastructure.database_connection import DatabaseConnection
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 
 class Repository:
-    "Ejecuta consultas en la base de datos."
+    """
+    Clase base para manejar operaciones en la base de datos con SQLAlchemy.
+    """
 
     def __init__(self):
-        self.db = DatabaseConnection()
-        self.connection = self.db.get_connection()
+        self.session = DatabaseConnection.get_session()
 
     def execute_query(self, query, params=None):
-        "Ejecuta una consulta SQL que modifica datos (INSERT, UPDATE, DELETE)."
-        cursor = self.connection.cursor()
+        """
+        Ejecuta una consulta SQL que modifica datos (INSERT, UPDATE, DELETE).
+        """
         try:
             logger.debug("Ejecutando query: %s con params: %s", query, params)
-            cursor.execute(query, params)
-            self.connection.commit()
-            return cursor.lastrowid
-        except Error as e:
+            result = self.session.execute(query, params)
+            self.session.commit()
+            return result.lastrowid
+        except SQLAlchemyError as e:
+            self.session.rollback()
             logger.error("Error ejecutando query: %s", e)
             return None
-        finally:
-            cursor.close()
 
     def fetch_query(self, query, params=None):
-        "Ejecuta una consulta SQL que devuelve resultados (SELECT)."
-        cursor = self.connection.cursor(dictionary=True)
+        """
+        Ejecuta una consulta SQL que devuelve resultados (SELECT).
+        """
         try:
             logger.debug("Ejecutando consulta SELECT: %s con params: %s", query, params)
-            cursor.execute(query, params)
-            return cursor.fetchall()
-        except Error as e:
+            result = self.session.execute(query, params)
+            return result.fetchall()
+        except SQLAlchemyError as e:
             logger.error("Error obteniendo datos: %s", e)
             return None
-        finally:
-            cursor.close()
-
-    def close(self):
-        "Cierra la conexión con la BD."
-        self.db.close_connection()
