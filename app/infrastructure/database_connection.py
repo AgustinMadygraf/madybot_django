@@ -1,6 +1,6 @@
 """
 Módulo de conexión a MySQL.
-Ubicación: app/infrastructure/database.py
+Ubicación: app/infrastructure/database_connection.py
 """
 
 import os
@@ -22,7 +22,7 @@ class DatabaseConnection:
         self.db_name = os.getenv('MYSQL_DATABASE', 'coopebot')
 
     def connect(self):
-        "Establece conexión con MySQL."
+        "Establece la conexión con MySQL."
         try:
             logger.info("Intentando conectar a la BD '%s'...", self.db_name)
             self.connection = mysql.connector.connect(
@@ -37,7 +37,7 @@ class DatabaseConnection:
             if e.errno == 1049:  # Error: BD no existe
                 logger.warning("La base de datos '%s' no existe. Creándola...", self.db_name)
                 self._create_database()
-                self.connect()  # Intentar conectar nuevamente
+                self.connect()
             else:
                 logger.error("Error al conectar con MySQL: %s", e)
 

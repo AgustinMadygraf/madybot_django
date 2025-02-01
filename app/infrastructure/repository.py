@@ -4,7 +4,7 @@ Ubicación: app/infrastructure/repository.py
 """
 
 from mysql.connector import Error
-from app.infrastructure.database import DatabaseConnection
+from app.infrastructure.database_connection import DatabaseConnection
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
