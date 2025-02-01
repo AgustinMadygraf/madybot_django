@@ -8,7 +8,7 @@ import re
 from difflib import get_close_matches
 import pymysql
 from Levenshtein import distance as levenshtein_distance
-from app.config import FlaskConfig
+from app.core.config import FlaskConfig
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
 class BusinessRulesEngine:

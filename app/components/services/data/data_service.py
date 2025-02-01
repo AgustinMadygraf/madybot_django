@@ -8,7 +8,7 @@ from app.utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator
 from app.components.channels.imessaging_channel import IMessagingChannel
-#from app.utils.mysql_connector import MySQLConnector
+from app.utils.mysql_connector import MySQLConnector
 
 logger = LoggerConfigurator().configure()
 
@@ -19,11 +19,11 @@ class DataService:
     """
 
     def __init__(self, validator: DataSchemaValidator,
-                 response_generator: ResponseGenerator, channel: IMessagingChannel):
+                 response_generator: ResponseGenerator, channel: IMessagingChannel, db: MySQLConnector):
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
-        #self.db = MySQLConnector()
+        self.db = db
 
     def process_incoming_data(self, json_data: dict) -> str:
         """
@@ -59,8 +59,8 @@ class DataService:
             'response': None  # La respuesta se actualizará después
         }
 
-        #self.save_user_data(user_data)
-        #conversation_id = self.save_conversation(conversation_data)
+        self.save_user_data(user_data)
+        conversation_id = self.save_conversation(conversation_data)
 
         try:
             if is_stream:
@@ -71,7 +71,7 @@ class DataService:
                 response = self.response_generator.generate_response(message_text)
 
             # Actualizar la respuesta en la base de datos
-#            self.update_conversation_response(conversation_id, response)
+            self.update_conversation_response(conversation_id, response)
             return response
 
         except (ValueError, TypeError) as e:

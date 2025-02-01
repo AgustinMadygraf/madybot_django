@@ -10,14 +10,10 @@ from dotenv import load_dotenv
 from marshmallow import ValidationError
 from app.utils.response import render_json_response
 from app.utils.logging.logger_configurator import LoggerConfigurator
+from app.core.config import FlaskConfig
+from app.core.dependency_container import container
 
-# Services y canales
-from app.components.services.data.data_service import DataService
-from app.components.services.data.data_validator import DataSchemaValidator
-from app.components.services.llm.model_config import ModelConfig
-from app.components.services.response.response_generator import ResponseGenerator
-from app.components.channels.web_messaging_channel import WebMessagingChannel
-from app.config import FlaskConfig
+data_service = container.data_service
 
 logger = LoggerConfigurator().configure()
 load_dotenv()
@@ -25,22 +21,6 @@ load_dotenv()
 data_controller = Blueprint('data_controller', __name__)
 CORS(data_controller)
 
-
-# Instanciar servicios y canal
-web_channel = WebMessagingChannel()
-data_validator = DataSchemaValidator()
-
-# Crear cliente LLM y ResponseGenerator
-model_config = ModelConfig()
-llm_client = model_config.create_llm_client()
-response_generator = ResponseGenerator(llm_client)
-
-# Crear DataService que unifica validación y respuesta
-data_service = DataService(
-    validator=data_validator,
-    response_generator=response_generator,
-    channel=web_channel
-)
 flask_config = FlaskConfig()
 config = flask_config.get_config()
 
@@ -61,7 +41,6 @@ def redirect_to_frontend():
 @data_controller.route('/API/V1/'+'receive-data/' , methods=['POST', 'HEAD'])
 @data_controller.route('/'       + 'receive-data' , methods=['POST', 'HEAD'])
 @data_controller.route('/'       + 'receive-data/', methods=['POST', 'HEAD'])
-
 def receive_data():
     "Recibe los datos de la solicitud y los procesa con el DataService."
     if request.method == 'HEAD':
