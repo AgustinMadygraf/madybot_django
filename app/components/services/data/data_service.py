@@ -9,6 +9,9 @@ from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator
 from app.components.channels.imessaging_channel import IMessagingChannel
 from app.utils.mysql_connector import MySQLConnector
+from app.infrastructure.repository import Repository
+
+
 
 logger = LoggerConfigurator().configure()
 
@@ -19,11 +22,13 @@ class DataService:
     """
 
     def __init__(self, validator: DataSchemaValidator,
-                 response_generator: ResponseGenerator, channel: IMessagingChannel, db: MySQLConnector):
+                 response_generator: ResponseGenerator,
+                 channel: IMessagingChannel, db: MySQLConnector, repository: Repository):
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
         self.db = db
+        self.repository = repository
 
     def process_incoming_data(self, json_data: dict) -> str:
         """
@@ -59,7 +64,7 @@ class DataService:
             'response': None  # La respuesta se actualizará después
         }
 
-        self.save_user_data(user_data)
+        self.save_user(user_data)
         conversation_id = self.save_conversation(conversation_data)
 
         try:
@@ -78,24 +83,21 @@ class DataService:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
 
-    def save_user_data(self, user_data):
+    def save_user(self, user_data):
         " Guarda los datos del usuario en la base de datos. "
         query = """
         INSERT INTO users (user_id, user_name, user_email)
         VALUES (%s, %s, %s)
         ON DUPLICATE KEY UPDATE user_name=VALUES(user_name), user_email=VALUES(user_email)
         """
-        params = (user_data['id'], user_data['name'], user_data['email'])
-        return self.db.execute_query(query, params)
+        return self.repository.execute_query(query, (user_data['id'], user_data['name'], user_data['email']))
+
 
     def save_conversation(self, conversation_data):
         " Guarda los datos de la conversación en la base de datos. "
-        query = """
-        INSERT INTO conversations (user_id, message, response)
-        VALUES (%s, %s, %s)
-        """
-        params = (conversation_data['user_id'], conversation_data['message'], conversation_data['response'])
-        return self.db.execute_query(query, params)
+        query = "INSERT INTO conversations (user_id, message, response) VALUES (%s, %s, %s)"
+        return self.repository.execute_query(query, (conversation_data['user_id'],
+                                                     conversation_data['message'], conversation_data['response']))
 
     def update_conversation_response(self, conversation_id, response):
         " Actualiza la respuesta de la conversación en la base de datos. "
