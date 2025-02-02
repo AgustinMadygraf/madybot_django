@@ -5,7 +5,7 @@ Path: app/components/services/ngrok/ngrok_coordinator.py
 
 import time
 import subprocess
-from app.config import FlaskConfig
+from app.core.config import FlaskConfig
 from app.utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.ngrok.ngrok_manager import NgrokManager
 from app.components.url.url_service import UrlService
@@ -53,4 +53,3 @@ class NgrokCoordinator:
         while True:
             time.sleep(1)
             #actualizar los valores de localhost:4040
-

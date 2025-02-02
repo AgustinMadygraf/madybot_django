@@ -19,13 +19,34 @@ class PersistenceService:
     def save_user(self, user_data: dict):
         """
         Guarda o actualiza los datos del usuario en la base de datos.
+        Se espera que user_data tenga la siguiente estructura:
+        {
+          "id": "<UUID>",
+          "browserData": {
+              "userAgent": "...",
+              "screenResolution": "...",
+              "language": "...",
+              "platform": "..."
+          }
+        }
         """
         query = """
-        INSERT INTO users (user_id, user_name, user_email)
-        VALUES (%s, %s, %s)
-        ON DUPLICATE KEY UPDATE user_name=VALUES(user_name), user_email=VALUES(user_email)
+        INSERT INTO usuarios (id, userAgent, screenResolution, language, platform)
+        VALUES (:id, :userAgent, :screenResolution, :language, :platform)
+        ON DUPLICATE KEY UPDATE
+          userAgent = VALUES(userAgent),
+          screenResolution = VALUES(screenResolution),
+          language = VALUES(language),
+          platform = VALUES(platform)
         """
-        result = self.repository.execute_query(query, (user_data['id'], user_data['name'], user_data['email']))
+        params = {
+            'id': user_data['id'],
+            'userAgent': user_data['browserData']['userAgent'],
+            'screenResolution': user_data['browserData']['screenResolution'],
+            'language': user_data['browserData']['language'],
+            'platform': user_data['browserData']['platform']
+        }
+        result = self.repository.execute_query(query, params)
         logger.info("Usuario guardado/actualizado: %s", user_data['id'])
         return result
 
@@ -33,10 +54,13 @@ class PersistenceService:
         """
         Guarda los datos de la conversación en la base de datos.
         """
-        query = "INSERT INTO conversations (user_id, message, response) VALUES (%s, %s, %s)"
-        result = self.repository.execute_query(query, (conversation_data['user_id'],
-                                                       conversation_data['message'],
-                                                       conversation_data['response']))
+        query = "INSERT INTO conversations (user_id, message, response) VALUES (:user_id, :message, :response)"
+        params = {
+            'user_id': conversation_data['user_id'],
+            'message': conversation_data['message'],
+            'response': conversation_data['response']
+        }
+        result = self.repository.execute_query(query, params)
         logger.info("Conversación guardada para el usuario: %s", conversation_data['user_id'])
         return result
 
@@ -46,9 +70,9 @@ class PersistenceService:
         """
         query = """
         UPDATE conversations
-        SET response = %s
-        WHERE id = %s
+        SET response = :response
+        WHERE id = :id
         """
-        params = (response, conversation_id)
+        params = {'response': response, 'id': conversation_id}
         self.repository.execute_query(query, params)
         logger.info("Respuesta actualizada para conversación ID: %s", conversation_id)

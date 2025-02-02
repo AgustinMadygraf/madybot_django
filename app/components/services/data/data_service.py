@@ -8,20 +8,19 @@ from app.utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator
 from app.components.channels.imessaging_channel import IMessagingChannel
-from app.infrastructure.database_connection import DatabaseConnection
 
 logger = LoggerConfigurator().configure()
 
 class DataService:
+    "Servicio para manejar la lógica principal de recepción y procesamiento de datos."
     def __init__(self, validator: DataSchemaValidator,
                  response_generator: ResponseGenerator,
                  channel: IMessagingChannel,
-                 persistence_service):  # ✅ No incluir `db`
+                 persistence_service):  # Inyección de PersistenceService
         self.validator = validator
         self.response_generator = response_generator
         self.channel = channel
         self.persistence_service = persistence_service
-
 
     def process_incoming_data(self, json_data: dict) -> str:
         """
@@ -42,19 +41,21 @@ class DataService:
         message_text = processed_data.get('message')
         is_stream = processed_data.get('stream', False)
 
-        # Preparar datos para persistencia
-        user_data = {
-            'id': valid_data.get('user_id'),
-            'name': valid_data.get('user_name'),
-            'email': valid_data.get('user_email')
-        }
+        # Extraer la información de usuario correctamente desde el campo anidado "user_data"
+        user_info = valid_data.get("user_data")
+        if not user_info:
+            raise KeyError("user_data")
+
+        # Preparar los datos para la conversación
         conversation_data = {
-            'user_id': valid_data.get('user_id'),
+            'user_id': user_info.get("id"),
             'message': message_text,
-            'response': None  # La respuesta se actualizará después
+            'response': None  # La respuesta se actualizará posteriormente
         }
 
-        self.persistence_service.save_user(user_data)
+        # Delegar la persistencia: se pasa el diccionario "user_info" tal como viene,
+        # ya que PersistenceService extrae internamente la información necesaria (incluyendo "browserData")
+        self.persistence_service.save_user(user_info)
         conversation_id = self.persistence_service.save_conversation(conversation_data)
 
         try:
@@ -71,3 +72,15 @@ class DataService:
         except (ValueError, TypeError) as e:
             logger.error("Error procesando la solicitud: %s", e)
             return "Error procesando la solicitud."
+
+    def save_user(self, user_data: dict):
+        """
+        Método que delega el guardado de usuario a PersistenceService.
+        """
+        return self.persistence_service.save_user(user_data)
+
+    def save_conversation(self, conversation_data: dict):
+        """
+        Método que delega el guardado de conversación a PersistenceService.
+        """
+        return self.persistence_service.save_conversation(conversation_data)

@@ -3,7 +3,6 @@ Path: app/core/dependency_container.py
 Contenedor de dependencias para la inyección de dependencias en la aplicación.
 """
 
-from app.infrastructure.database_connection import DatabaseConnection
 from app.components.services.data.data_service import DataService
 from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator

@@ -79,7 +79,7 @@ def health_check():
 def save_user():
     " Guarda los datos del usuario en la base de datos. "
     user_data = request.json
-    user_id = data_service.save_user_data(user_data)
+    user_id = data_service.save_user(user_data)
     return jsonify({'user_id': user_id})
 
 @data_controller.route('/save_conversation', methods=['POST'])

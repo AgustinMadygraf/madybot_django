@@ -4,6 +4,7 @@ Módulo de ejecución de consultas SQL utilizando SQLAlchemy.
 """
 
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import text
 from app.infrastructure.database_connection import DatabaseConnection
 from app.utils.logging.logger_configurator import LoggerConfigurator
 
@@ -23,7 +24,7 @@ class Repository:
         """
         try:
             logger.debug("Ejecutando query: %s con params: %s", query, params)
-            result = self.session.execute(query, params)
+            result = self.session.execute(text(query), params)
             self.session.commit()
             return result.lastrowid
         except SQLAlchemyError as e:
@@ -37,7 +38,7 @@ class Repository:
         """
         try:
             logger.debug("Ejecutando consulta SELECT: %s con params: %s", query, params)
-            result = self.session.execute(query, params)
+            result = self.session.execute(text(query), params)
             return result.fetchall()
         except SQLAlchemyError as e:
             logger.error("Error obteniendo datos: %s", e)
