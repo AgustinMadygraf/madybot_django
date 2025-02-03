@@ -2,7 +2,7 @@
 
 from app.models import Conversation
 from app.core.config import db
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 

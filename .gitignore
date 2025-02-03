@@ -20,3 +20,6 @@ app/utils/logging/docs/00-Prompt-for-ProjectAnalysis.md
 app/utils/logging/sistema.log
 app/infrastructure/__pycache__/
 app/repositories/__pycache__/
+utils/logging/__pycache__/
+utils/__pycache__/__init__.cpython-311.pyc
+utils/logging/sistema.log

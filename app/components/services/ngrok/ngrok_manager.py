@@ -3,7 +3,7 @@ Path: app/components/services/ngrok/ngrok_manager.py
 """
 
 import time
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.ngrok.ngrok_session import NgrokSession
 from app.components.services.ngrok.ngrok_api import NgrokAPI
 

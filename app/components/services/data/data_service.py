@@ -4,7 +4,7 @@ Servicio para manejar la lógica principal de recepción y procesamiento de dato
 """
 
 from marshmallow import ValidationError
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.data.data_validator import DataSchemaValidator
 from app.components.services.response.response_generator import ResponseGenerator
 from app.components.channels.imessaging_channel import IMessagingChannel

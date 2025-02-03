@@ -3,7 +3,7 @@ Path: app/components/services/response/response_generator.py
 
 """
 
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.llm.model_config import ModelConfig
 from app.components.services.llm.llm_client import IBaseLLMClient, IStreamingLLMClient
 from app.components.services.business.business_rules_engine import BusinessRulesEngine

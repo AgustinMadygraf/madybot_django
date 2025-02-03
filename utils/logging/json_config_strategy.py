@@ -7,7 +7,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
-from app.utils.logging.config_strategy import ConfigStrategy
+from utils.logging.config_strategy import ConfigStrategy
 
 class JSONConfigStrategy(ConfigStrategy):
     """

@@ -9,7 +9,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy  # Importamos SQLAlchemy
 from dotenv import load_dotenv
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 # Cargar variables desde el archivo .env
 load_dotenv()

@@ -6,7 +6,7 @@ Módulo de ejecución de consultas SQL utilizando SQLAlchemy.
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
 from app.infrastructure.database_connection import DatabaseConnection
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 

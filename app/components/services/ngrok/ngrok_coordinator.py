@@ -6,7 +6,7 @@ Path: app/components/services/ngrok/ngrok_coordinator.py
 import time
 import subprocess
 from app.core.config import FlaskConfig
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 from app.components.services.ngrok.ngrok_manager import NgrokManager
 from app.components.url.url_service import UrlService
 

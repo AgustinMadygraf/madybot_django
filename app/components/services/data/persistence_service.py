@@ -2,7 +2,7 @@
 
 from app.repositories.user_repository import UserRepository
 from app.repositories.conversation_repository import ConversationRepository
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 

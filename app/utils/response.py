@@ -4,7 +4,7 @@ Path: app/utils/response.py
 """
 
 from flask import jsonify
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 
 logger = LoggerConfigurator().configure()

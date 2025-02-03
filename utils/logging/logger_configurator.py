@@ -6,8 +6,8 @@ Clase LoggerConfigurator mejorada para garantizar una única instancia y configu
 import logging.config
 from typing import Optional
 import json
-from app.utils.logging.json_config_strategy import JSONConfigStrategy
-from app.utils.logging.config_strategy import ConfigStrategy
+from utils.logging.json_config_strategy import JSONConfigStrategy
+from utils.logging.config_strategy import ConfigStrategy
 
 class LoggerConfigurator:
     """Clase singleton para configurar el logger usando una estrategia y filtros dinámicos."""

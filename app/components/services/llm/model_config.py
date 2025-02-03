@@ -18,9 +18,9 @@ load_dotenv()
 # Intentamos usar el logger global si existe (en app/logs/dependency_injection),
 # en caso contrario, usamos uno local basado en LoggerConfigurator.
 try:
-    from app.utils.logging.dependency_injection import app_logger as default_logger
+    from utils.logging.dependency_injection import app_logger as default_logger
 except ImportError:
-    from app.utils.logging.logger_configurator import LoggerConfigurator
+    from utils.logging.logger_configurator import LoggerConfigurator
     default_logger = LoggerConfigurator().configure()
 
 class ModelConfig:

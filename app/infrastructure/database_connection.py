@@ -4,7 +4,7 @@ Módulo de conexión a MySQL utilizando SQLAlchemy.
 """
 
 from app.core.config import db
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 logger = LoggerConfigurator().configure()
 

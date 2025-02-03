@@ -3,7 +3,7 @@ Path: app/core_services/ngrok_api.py
 """
 
 import requests
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 class NgrokAPI:
     """Clase para interactuar con la API local de ngrok."""

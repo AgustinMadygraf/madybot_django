@@ -3,9 +3,9 @@ Path: app/logs/dependency_injection.py
 Contenedor de dependencias para inyección de dependencias.
 """
 
-from app.utils.logging.logger_configurator import LoggerConfigurator
-from app.utils.logging.info_error_filter import InfoErrorFilter
-from app.utils.logging.exclude_http_logs_filter import ExcludeHTTPLogsFilter
+from utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.info_error_filter import InfoErrorFilter
+from utils.logging.exclude_http_logs_filter import ExcludeHTTPLogsFilter
 
 # Crear una instancia global de LoggerConfigurator
 configurator = LoggerConfigurator()

@@ -9,7 +9,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from marshmallow import ValidationError
 from app.utils.response import render_json_response
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 from app.core.config import FlaskConfig
 from app.core.dependency_container import container
 

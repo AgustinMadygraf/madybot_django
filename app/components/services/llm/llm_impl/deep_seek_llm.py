@@ -9,7 +9,7 @@ import os
 from openai import OpenAI, AuthenticationError, OpenAIError
 from dotenv import load_dotenv
 from app.components.services.llm_client import IBaseLLMClient
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 # Cargar API key desde variables de entorno
 load_dotenv()

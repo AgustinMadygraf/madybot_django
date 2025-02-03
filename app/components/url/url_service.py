@@ -4,7 +4,7 @@ Path: app/core_services/url_service.py
 """
 
 import requests
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 class UrlService:
     """Servicio para obtener y guardar la URL pública de ngrok en un servidor remoto."""

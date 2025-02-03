@@ -3,7 +3,7 @@ Path: app/core_services/ngrok_session.py
 """
 
 import subprocess
-from app.utils.logging.logger_configurator import LoggerConfigurator
+from utils.logging.logger_configurator import LoggerConfigurator
 
 class NgrokSession:
     """Maneja la creación y finalización de la sesión de ngrok."""
