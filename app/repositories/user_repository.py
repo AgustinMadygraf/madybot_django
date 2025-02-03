@@ -1,5 +1,9 @@
-# app/repositories/user_repository.py
+"""
+Path: app/repositories/user_repository.py
 
+"""
+
+from sqlalchemy.exc import SQLAlchemyError
 from app.models import User
 from app.core.config import db
 from utils.logging.logger_configurator import LoggerConfigurator
@@ -11,28 +15,63 @@ class UserRepository:
     Repositorio para gestionar la persistencia de usuarios en la base de datos.
     """
 
-    def ensure_user_exists(self, user_id, user_name=None, user_email=None):
+    def ensure_user_exists(self, user_id, user_name=None, user_email=None, user_agent=None,
+                        screen_resolution=None, language=None, platform=None):
         """
         Verifica si un usuario existe en la base de datos. 
-        Si no existe, lo inserta con los datos proporcionados.
-
+        Si no existe, lo inserta con los datos proporcionados; si ya existe, se actualizan
+        los campos adicionales si se proporcionan nuevos valores.
+        
         :param user_id: Identificador único del usuario.
         :param user_name: (Opcional) Nombre del usuario.
         :param user_email: (Opcional) Correo del usuario.
-        :return: El objeto User si ya existía o el nuevo usuario insertado.
+        :param user_agent: (Opcional) User-Agent del navegador.
+        :param screen_resolution: (Opcional) Resolución de pantalla.
+        :param language: (Opcional) Idioma.
+        :param platform: (Opcional) Plataforma.
+        :return: El objeto User insertado o actualizado.
         """
         try:
             existing_user = User.query.filter_by(user_id=user_id).first()
             if not existing_user:
-                new_user = User(user_id=user_id, user_name=user_name, user_email=user_email)
+                new_user = User(
+                    user_id=user_id,
+                    user_name=user_name,
+                    user_email=user_email,
+                    user_agent=user_agent,
+                    screen_resolution=screen_resolution,
+                    language=language,
+                    platform=platform
+                )
                 db.session.add(new_user)
                 db.session.commit()
                 logger.info("Usuario %s insertado correctamente.", user_id)
                 return new_user
             else:
-                logger.info("El usuario %s ya existe.", user_id)
+                updated = False
+                if user_name is not None and existing_user.user_name != user_name:
+                    existing_user.user_name = user_name
+                    updated = True
+                if user_email is not None and existing_user.user_email != user_email:
+                    existing_user.user_email = user_email
+                    updated = True
+                if user_agent is not None and existing_user.user_agent != user_agent:
+                    existing_user.user_agent = user_agent
+                    updated = True
+                if screen_resolution is not None and existing_user.screen_resolution != screen_resolution:
+                    existing_user.screen_resolution = screen_resolution
+                    updated = True
+                if language is not None and existing_user.language != language:
+                    existing_user.language = language
+                    updated = True
+                if platform is not None and existing_user.platform != platform:
+                    existing_user.platform = platform
+                    updated = True
+                if updated:
+                    db.session.commit()
+                logger.info("El usuario %s ya existe y se actualizó la información.", user_id)
                 return existing_user
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             logger.error("Error en ensure_user_exists: %s", e)
             return None
@@ -51,7 +90,7 @@ class UserRepository:
             else:
                 logger.warning("Usuario %s no encontrado.", user_id)
                 return None
-        except Exception as e:
+        except SQLAlchemyError as e:
             logger.error("Error obteniendo usuario %s: %s", user_id, e)
             return None
 
@@ -77,7 +116,7 @@ class UserRepository:
             else:
                 logger.warning("No se encontró el usuario %s para actualizar.", user_id)
                 return None
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             logger.error("Error actualizando usuario %s: %s", user_id, e)
             return None
@@ -99,7 +138,7 @@ class UserRepository:
             else:
                 logger.warning("No se encontró el usuario %s para eliminar.", user_id)
                 return False
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             logger.error("Error eliminando usuario %s: %s", user_id, e)
             return False

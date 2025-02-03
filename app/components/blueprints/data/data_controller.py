@@ -77,8 +77,9 @@ def health_check():
 
 @data_controller.route('/save_user', methods=['POST'])
 def save_user():
-    " Guarda los datos del usuario en la base de datos. "
+    "Guarda los datos del usuario en la base de datos."
     user_data = request.json
+    logger.info("Datos recibidos en save_user(): %s", user_data)
     user_id = data_service.save_user(user_data)
     return jsonify({'user_id': user_id})
 
