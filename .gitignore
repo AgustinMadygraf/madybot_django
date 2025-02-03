@@ -19,3 +19,4 @@ app/components/services/llm/llm_impl/__pycache__/
 app/utils/logging/docs/00-Prompt-for-ProjectAnalysis.md
 app/utils/logging/sistema.log
 app/infrastructure/__pycache__/
+app/repositories/__pycache__/
