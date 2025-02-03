@@ -1,5 +1,9 @@
-# app/components/services/data/persistence_service.py
+"""
+Path: app/components/services/data/persistence_service.py
 
+"""
+
+from sqlalchemy.exc import DatabaseError, IntegrityError
 from app.repositories.user_repository import UserRepository
 from app.repositories.conversation_repository import ConversationRepository
 from utils.logging.logger_configurator import LoggerConfigurator
@@ -25,20 +29,19 @@ class PersistenceService:
         """
         try:
             user_id = user_data.get("id")
-            browser_data = user_data.get("browserData", {})
-
-            user = self.user_repository.save_user(
-                user_id=user_id,
-                userAgent=browser_data.get("userAgent"),
-                screenResolution=browser_data.get("screenResolution"),
-                language=browser_data.get("language"),
-                platform=browser_data.get("platform"),
-            )
+            # Usar ensure_user_exists en lugar de un método inexistente save_user
+            user = self.user_repository.ensure_user_exists(user_id=user_id)
             if user:
                 logger.info("Usuario guardado/actualizado con ID: %s", user_id)
             return user
-        except Exception as e:
-            logger.error("Error al guardar el usuario: %s", e)
+        except KeyError as e:
+            logger.error("Error al guardar el usuario, clave no encontrada: %s", e)
+            return None
+        except TypeError as e:
+            logger.error("Error al guardar el usuario, tipo de dato incorrecto: %s", e)
+            return None
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al guardar el usuario: %s", e)
             return None
 
     def save_conversation(self, conversation_data: dict):
@@ -46,27 +49,35 @@ class PersistenceService:
         Guarda una nueva conversación en la base de datos.
 
         :param conversation_data: Diccionario con los datos de la conversación.
-        :return: Objeto Conversation insertado o None en caso de error.
+        :return: ID de la conversación insertada o None en caso de error.
         """
         try:
             user_id = conversation_data.get("user_id")
             message = conversation_data.get("message")
             response = conversation_data.get("response")
-
             conversation = self.conversation_repository.save_conversation(
-                user_id=user_id, message=message, response=response
+                user_id=user_id,
+                message=message,
+                response=response
             )
-
             if conversation:
                 logger.info("Conversación guardada para el usuario %s", user_id)
-            return conversation
-        except Exception as e:
-            logger.error("Error al guardar la conversación: %s", e)
+                # Retornar el identificador de la conversación en lugar del objeto completo
+                return conversation.id
+            return None
+        except KeyError as e:
+            logger.error("Error al guardar la conversación, clave no encontrada: %s", e)
+            return None
+        except TypeError as e:
+            logger.error("Error al guardar la conversación, tipo de dato incorrecto: %s", e)
+            return None
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al guardar la conversación: %s", e)
             return None
 
     def update_conversation_response(self, conversation_id, response):
         """
-        Actualiza la respuesta de una conversación en la base de datos.
+        Actualiza la respuesta de una conversación existente.
 
         :param conversation_id: ID de la conversación a actualizar.
         :param response: Nueva respuesta generada.
@@ -77,8 +88,15 @@ class PersistenceService:
             if conversation:
                 logger.info("Respuesta de la conversación %s actualizada correctamente.", conversation_id)
             return conversation
-        except Exception as e:
-            logger.error("Error al actualizar la respuesta de la conversación %s: %s", conversation_id, e)
+        except KeyError as e:
+            logger.error("Error al actualizar la respuesta de la conversación, clave no encontrada: %s", e)
+            return None
+        except TypeError as e:
+            logger.error("Error al actualizar la respuesta de la conversación, tipo de dato incorrecto: %s", e)
+            return None
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al actualizar la respuesta de la conversación %s: %s",
+                         conversation_id, e)
             return None
 
     def get_user_by_id(self, user_id):
@@ -91,8 +109,14 @@ class PersistenceService:
         try:
             user = self.user_repository.get_user_by_id(user_id)
             return user
-        except Exception as e:
-            logger.error("Error al obtener usuario %s: %s", user_id, e)
+        except KeyError as e:
+            logger.error("Error al obtener usuario, clave no encontrada: %s", e)
+            return None
+        except TypeError as e:
+            logger.error("Error al obtener usuario, tipo de dato incorrecto: %s", e)
+            return None
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al obtener usuario %s: %s", user_id, e)
             return None
 
     def get_conversations_by_user(self, user_id, limit=10):
@@ -106,8 +130,14 @@ class PersistenceService:
         try:
             conversations = self.conversation_repository.get_conversations_by_user(user_id, limit)
             return conversations
-        except Exception as e:
-            logger.error("Error al obtener conversaciones para el usuario %s: %s", user_id, e)
+        except KeyError as e:
+            logger.error("Error al obtener conversaciones para el usuario, clave no encontrada: %s", e)
+            return []
+        except TypeError as e:
+            logger.error("Error al obtener conversaciones para el usuario, tipo de dato incorrecto: %s", e)
+            return []
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al obtener conversaciones para el usuario %s: %s", user_id, e)
             return []
 
     def delete_conversation(self, conversation_id):
@@ -122,6 +152,12 @@ class PersistenceService:
             if success:
                 logger.info("Conversación %s eliminada correctamente.", conversation_id)
             return success
-        except Exception as e:
-            logger.error("Error al eliminar la conversación %s: %s", conversation_id, e)
+        except KeyError as e:
+            logger.error("Error al eliminar la conversación, clave no encontrada: %s", e)
+            return False
+        except TypeError as e:
+            logger.error("Error al eliminar la conversación, tipo de dato incorrecto: %s", e)
+            return False
+        except (DatabaseError, IntegrityError) as e:
+            logger.error("Error de base de datos al eliminar la conversación %s: %s", conversation_id, e)
             return False
